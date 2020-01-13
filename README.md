@@ -3,11 +3,11 @@ game
 
 This project implements the game of Breakout.
 
-Name: 
+Name: Tyler Jang
 
 ### Timeline
 
-Start Date: 
+Start Date: January 12, 2020
 
 Finish Date: 
 
