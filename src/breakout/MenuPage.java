@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -29,6 +30,7 @@ public class MenuPage {
     public static final Paint BACKGROUND = Color.CADETBLUE; //TODO: DRY
     public static final String START_TEXT = "START";
     public static final String HELP_TEXT = "HELP";
+    public static final String LEVEL_TEXT = "LEVELS";
     public static final Font MENU_FONT = new Font("Castellar", BOX_SIZE / 10);
     public static final Font TITLE_FONT = new Font("Castellar", BOX_SIZE / 5);
 
@@ -59,6 +61,9 @@ public class MenuPage {
         MenuBox helpBox = new MenuBox(centerX, sceneHeight / 2 + BOX_HEIGHT);
         MenuText helpText = new MenuText(centerX, sceneHeight / 2 + BOX_HEIGHT * 16 / 10, HELP_TEXT, MENU_FONT);
 
+        MenuBox levelBox = new MenuBox(centerX, sceneHeight / 2 + BOX_HEIGHT * 5 / 2);
+        MenuText levelText = new MenuText(centerX, sceneHeight / 2 + BOX_HEIGHT * 31 / 10, LEVEL_TEXT, MENU_FONT);
+
         EventHandler <MouseEvent> startHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent e) {
@@ -72,9 +77,14 @@ public class MenuPage {
         startBox.addEventFilter(MouseEvent.MOUSE_CLICKED, startHandler);
         startText.addEventFilter(MouseEvent.MOUSE_CLICKED, startHandler);
 
+
+
         root.getChildren().add(titleText);
         root.getChildren().add(startBox);
         root.getChildren().add(startText);
+
+        root.getChildren().add(levelBox);
+        root.getChildren().add(levelText);
 
         return new Scene(root, sceneWidth, sceneHeight, BACKGROUND);
     }
