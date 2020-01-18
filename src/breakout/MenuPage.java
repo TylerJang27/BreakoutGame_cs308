@@ -17,7 +17,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import javafx.scene.Scene;
 
 public class MenuPage {
@@ -33,6 +32,11 @@ public class MenuPage {
     private int sceneWidth;
     private int sceneHeight;
 
+    /**
+     *   Constructor to create a MenuPage object
+     *      @param width    the width for the entire scene
+     *      @param height   the height for the entire scene
+     */
     public MenuPage (int width, int height) {
         sceneWidth = width;
         sceneHeight = height;
@@ -68,14 +72,18 @@ public class MenuPage {
         helpText.setY(sceneHeight / 2 + BOX_HEIGHT * 16 / 10);
         helpText.setFont(boxFont);
 
-        EventHandler <MouseEvent> startHandler = new EventHandler<MouseEvent>() {
+        EventHandler <MouseEvent> startHandler = new EventHandler<MouseEvent>() {   //TODO: CAN'T BE CLICKED MULTIPLE TIMES, DOESN'T ALLOW CLICK ON TEXT
             @Override
             public void handle (MouseEvent e) {
-                root.getChildren().add(helpBox);
-                root.getChildren().add(helpText);
+                if (!root.getChildren().contains(helpBox)) {
+                    root.getChildren().add(helpBox);
+                    root.getChildren().add(helpText);
+                }
             }
         };
+
         startBox.addEventFilter(MouseEvent.MOUSE_CLICKED, startHandler);
+        startText.addEventFilter(MouseEvent.MOUSE_CLICKED, startHandler);
 
         root.getChildren().add(titleText);
         root.getChildren().add(startBox);
