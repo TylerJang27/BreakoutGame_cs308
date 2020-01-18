@@ -31,8 +31,7 @@ public class MenuPage {
     public static final String START_TEXT = "START";
     public static final String HELP_TEXT = "HELP";
     public static final String LEVEL_TEXT = "LEVELS";
-    public static final Font MENU_FONT = new Font("Castellar", BOX_SIZE / 10);
-    public static final Font TITLE_FONT = new Font("Castellar", BOX_SIZE / 5);
+    public static final Font TITLE_FONT = new Font("Castellar", BOX_WIDTH / 5);
 
     private double sceneWidth;
     private double sceneHeight;
@@ -55,36 +54,30 @@ public class MenuPage {
 
         MenuText titleText = new MenuText(centerX, sceneHeight / 4 + BOX_HEIGHT / 5, TITLE, TITLE_FONT);
 
-        MenuBox startBox = new MenuBox(centerX, sceneHeight / 2 - BOX_HEIGHT / 2);
-        MenuText startText = new MenuText(centerX, sceneHeight / 2 + BOX_HEIGHT / 10, START_TEXT, MENU_FONT);
+        MenuBox startBox = new MenuBox(centerX, sceneHeight / 2 - BOX_HEIGHT / 2, START_TEXT);
+        //MenuText startText = new MenuText(centerX, sceneHeight / 2 + BOX_HEIGHT / 10, START_TEXT, MENU_FONT);
 
-        MenuBox helpBox = new MenuBox(centerX, sceneHeight / 2 + BOX_HEIGHT);
-        MenuText helpText = new MenuText(centerX, sceneHeight / 2 + BOX_HEIGHT * 16 / 10, HELP_TEXT, MENU_FONT);
+        MenuBox helpBox = new MenuBox(centerX, sceneHeight / 2 + BOX_HEIGHT, HELP_TEXT);
+        //MenuText helpText = new MenuText(centerX, sceneHeight / 2 + BOX_HEIGHT * 16 / 10, HELP_TEXT, MENU_FONT);
 
-        MenuBox levelBox = new MenuBox(centerX, sceneHeight / 2 + BOX_HEIGHT * 5 / 2);
-        MenuText levelText = new MenuText(centerX, sceneHeight / 2 + BOX_HEIGHT * 31 / 10, LEVEL_TEXT, MENU_FONT);
+        MenuBox levelBox = new MenuBox(centerX, sceneHeight / 2 + BOX_HEIGHT * 5 / 2, LEVEL_TEXT);
+        //MenuText levelText = new MenuText(centerX, sceneHeight / 2 + BOX_HEIGHT * 31 / 10, LEVEL_TEXT, MENU_FONT);
 
         EventHandler <MouseEvent> startHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent e) {
                 if (!root.getChildren().contains(helpBox)) {
-                    root.getChildren().add(helpBox);
-                    root.getChildren().add(helpText);
+                    root.getChildren().addAll(helpBox.getAllNodes());
                 }
             }
         };
 
-        startBox.addEventFilter(MouseEvent.MOUSE_CLICKED, startHandler);
-        startText.addEventFilter(MouseEvent.MOUSE_CLICKED, startHandler);
-
-
+        startBox.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, startHandler);
 
         root.getChildren().add(titleText);
-        root.getChildren().add(startBox);
-        root.getChildren().add(startText);
+        root.getChildren().addAll(startBox.getAllNodes());
 
-        root.getChildren().add(levelBox);
-        root.getChildren().add(levelText);
+        root.getChildren().addAll(levelBox.getAllNodes());
 
         return new Scene(root, sceneWidth, sceneHeight, BACKGROUND);
     }
