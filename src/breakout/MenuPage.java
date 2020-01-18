@@ -23,16 +23,17 @@ public class MenuPage {
 
     //TODO: FIX PUBLICITY
     public static final String TITLE = "Brick Bonanza"; //TODO: DRY
-    public static final int BOX_SIZE = 300;
-    public static final int BOX_WIDTH = BOX_SIZE;
-    public static final int BOX_HEIGHT = BOX_SIZE / 4;
+    public static final double BOX_SIZE = 300;
+    public static final double BOX_WIDTH = BOX_SIZE;
+    public static final double BOX_HEIGHT = BOX_SIZE / 4;
     public static final Paint BACKGROUND = Color.CADETBLUE; //TODO: DRY
     public static final String START_TEXT = "START";
     public static final String HELP_TEXT = "HELP";
+    public static final Font MENU_FONT = new Font("Castellar", BOX_SIZE / 10);
+    public static final Font TITLE_FONT = new Font("Castellar", BOX_SIZE / 5);
 
-
-    private int sceneWidth;
-    private int sceneHeight;
+    private double sceneWidth;
+    private double sceneHeight;
     private double centerX;
 
     /**
@@ -40,38 +41,25 @@ public class MenuPage {
      *      @param width    int width for the entire scene
      *      @param height   int height for the entire scene
      */
-    public MenuPage (int width, int height) {
+    public MenuPage (double width, double height) {
         sceneWidth = width;
         sceneHeight = height;
-        centerX = sceneWidth / 2 - BOX_WIDTH / 2;
+        centerX = sceneWidth / 2;
     }
 
     public Scene setupMenu() {
 
         Group root = new Group();
 
-        Text titleText = new Text(TITLE);                       //TODO: DRY THESE (create a subclass)
-        Font titleFont = new Font("", BOX_SIZE / 5);
-        titleText.setX(sceneWidth / 2 - BOX_WIDTH * 3 / 5);
-        titleText.setY(sceneHeight / 4 + BOX_HEIGHT / 5);
-        titleText.setFont(titleFont);
+        MenuText titleText = new MenuText(centerX, sceneHeight / 4 + BOX_HEIGHT / 5, TITLE, TITLE_FONT);
 
         MenuBox startBox = new MenuBox(centerX, sceneHeight / 2 - BOX_HEIGHT / 2);
-
-        Text startText = new Text(START_TEXT);
-        Font boxFont = new Font("", BOX_SIZE / 10);
-        startText.setX(sceneWidth / 2 - BOX_WIDTH / 7.5);
-        startText.setY(sceneHeight / 2 + BOX_HEIGHT / 10);
-        startText.setFont(boxFont);
+        MenuText startText = new MenuText(centerX, sceneHeight / 2 + BOX_HEIGHT / 10, START_TEXT, MENU_FONT);
 
         MenuBox helpBox = new MenuBox(centerX, sceneHeight / 2 + BOX_HEIGHT);
+        MenuText helpText = new MenuText(centerX, sceneHeight / 2 + BOX_HEIGHT * 16 / 10, HELP_TEXT, MENU_FONT);
 
-        Text helpText = new Text(HELP_TEXT);
-        helpText.setX(sceneWidth / 2 - BOX_WIDTH / 7.5);
-        helpText.setY(sceneHeight / 2 + BOX_HEIGHT * 16 / 10);
-        helpText.setFont(boxFont);
-
-        EventHandler <MouseEvent> startHandler = new EventHandler<MouseEvent>() {   //TODO: CAN'T BE CLICKED MULTIPLE TIMES, DOESN'T ALLOW CLICK ON TEXT
+        EventHandler <MouseEvent> startHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent e) {
                 if (!root.getChildren().contains(helpBox)) {

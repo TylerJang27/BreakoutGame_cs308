@@ -4,8 +4,8 @@ import javafx.scene.shape.Rectangle;
 
 public class MenuBox extends Rectangle {
 
-    private static final int BOX_WIDTH = MenuPage.BOX_WIDTH;
-    private static final int BOX_HEIGHT = MenuPage.BOX_HEIGHT;
+    private static final double BOX_WIDTH = MenuPage.BOX_WIDTH;
+    private static final double BOX_HEIGHT = MenuPage.BOX_HEIGHT;
     /**
      * Constructor to create a MenuBox object
      * Used for instances like startBox, helpBox, etc.
@@ -16,7 +16,7 @@ public class MenuBox extends Rectangle {
      * @param color     color of rectangle
      */
     public MenuBox(double x, double y, double width, double height, Color color) {
-        super(x, y, width, height);
+        super(x - width / 2, y, width, height);
         this.setFill(color);
         this.setArcWidth(width / 5);
         this.setArcHeight(height / 2);
