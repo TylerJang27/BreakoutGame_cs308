@@ -21,6 +21,7 @@ import javafx.scene.Scene;
 
 public class MenuPage {
 
+    //TODO: FIX PUBLICITY
     public static final String TITLE = "Brick Bonanza"; //TODO: DRY
     public static final int BOX_SIZE = 300;
     public static final int BOX_WIDTH = BOX_SIZE;
@@ -29,20 +30,24 @@ public class MenuPage {
     public static final String START_TEXT = "START";
     public static final String HELP_TEXT = "HELP";
 
+
     private int sceneWidth;
     private int sceneHeight;
+    private double centerX;
 
     /**
      *   Constructor to create a MenuPage object
-     *      @param width    the width for the entire scene
-     *      @param height   the height for the entire scene
+     *      @param width    int width for the entire scene
+     *      @param height   int height for the entire scene
      */
     public MenuPage (int width, int height) {
         sceneWidth = width;
         sceneHeight = height;
+        centerX = sceneWidth / 2 - BOX_WIDTH / 2;
     }
 
     public Scene setupMenu() {
+
         Group root = new Group();
 
         Text titleText = new Text(TITLE);                       //TODO: DRY THESE (create a subclass)
@@ -51,10 +56,7 @@ public class MenuPage {
         titleText.setY(sceneHeight / 4 + BOX_HEIGHT / 5);
         titleText.setFont(titleFont);
 
-        Rectangle startBox = new Rectangle(BOX_WIDTH, BOX_HEIGHT);
-        startBox.setX(sceneWidth / 2 - BOX_WIDTH / 2);
-        startBox.setY(sceneHeight / 2 - BOX_HEIGHT / 2);
-        startBox.setFill(Color.DARKGREY);
+        MenuBox startBox = new MenuBox(centerX, sceneHeight / 2 - BOX_HEIGHT / 2);
 
         Text startText = new Text(START_TEXT);
         Font boxFont = new Font("", BOX_SIZE / 10);
@@ -62,10 +64,7 @@ public class MenuPage {
         startText.setY(sceneHeight / 2 + BOX_HEIGHT / 10);
         startText.setFont(boxFont);
 
-        Rectangle helpBox = new Rectangle(BOX_WIDTH, BOX_HEIGHT);
-        helpBox.setX(sceneWidth / 2 - BOX_WIDTH / 2);
-        helpBox.setY(sceneHeight / 2 + BOX_HEIGHT);
-        helpBox.setFill(Color.DARKGREY);
+        MenuBox helpBox = new MenuBox(centerX, sceneHeight / 2 + BOX_HEIGHT);
 
         Text helpText = new Text(HELP_TEXT);
         helpText.setX(sceneWidth / 2 - BOX_WIDTH / 7.5);
