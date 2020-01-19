@@ -11,7 +11,7 @@ import javafx.scene.shape.Circle;
  */
 public class Entity extends Circle {
 
-    private static int RADIUS = Main.SIZE / 20;
+    private static double RADIUS = Main.SIZE / 20;
     private double xVelocity;
     private double yVelocity;
     private double speed;
@@ -22,8 +22,26 @@ public class Entity extends Circle {
      * @param image     Image to fill the Entity
      */
     public Entity (Image image) {
-        super(Main.SIZE / 2, Main.SIZE / 2, RADIUS);
+        super(Main.SIZE, Main.SIZE / 2, RADIUS);
         this.setFill(new ImagePattern(image));
+    }
+
+    /**
+     * Steps in the established X and Y directions
+     * @param elapsedTime   deltaT
+     */
+    public void step(double elapsedTime) {
+        this.setCenterX(this.getCenterX() + xVelocity * elapsedTime);
+        this.setCenterY(this.getCenterY() + yVelocity * elapsedTime);
+        this.setRotate(this.getRotate() + speed / 10);
+    }
+
+    /**
+     * Returns the radius of the Entity
+     * @return RADIUS       constant RADIUS
+     */
+    public double getRADIUS() {
+        return RADIUS;
     }
 
     /**

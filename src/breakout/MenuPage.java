@@ -30,7 +30,7 @@ public class MenuPage {
     private static final String HELP_TEXT = "HELP";
     private static final String LEVEL_TEXT = "LEVELS";
     private static final Font TITLE_FONT = new Font("Castellar", BOX_WIDTH / 5);
-    public static final String BACK_PNG = "Resources/back.png";
+    private static final String BACK_PNG = "Resources/back.png";
 
     private GameManager myGameManager;
     private double sceneWidth;
@@ -133,6 +133,7 @@ public class MenuPage {
     /**
      * Creates the Levels page, with Levels and back button
      * @return Scene of the Levels page
+     * @throws FileNotFoundException
      */
     private Scene setupLevel() throws FileNotFoundException {
         Group root = new Group();
@@ -190,6 +191,7 @@ public class MenuPage {
     /**
      * Creates the Help page, with description and back button
      * @return Scene of the Help page
+     * @throws FileNotFoundException
      */
     private Scene setupHelp() throws FileNotFoundException {
         Group root = new Group();

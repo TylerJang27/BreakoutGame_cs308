@@ -36,6 +36,7 @@ public class Main extends Application {
     /**
      * Initialize the scene to start
      * @param stage     Stage on which to show game
+     * @throws FileNotFoundException
      */
     @Override
     public void start (Stage stage) throws FileNotFoundException {

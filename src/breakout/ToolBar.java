@@ -43,6 +43,7 @@ public class ToolBar {
      * @param height    height of the Scene
      * @param lives          the number of lives the player has
      * @param score          the player's score
+     * @throws FileNotFoundException
      */
     public ToolBar(double width, double height, int lives, long score) throws FileNotFoundException {
         sceneWidth = width;
@@ -76,6 +77,7 @@ public class ToolBar {
     /**
      * Creates a List of hearts representing lives
      * @param lives     the number of lives the player has left
+     * @throws FileNotFoundException
      */
     public void resetHearts(int lives) throws FileNotFoundException {
         heartList = new ArrayList<Node>();

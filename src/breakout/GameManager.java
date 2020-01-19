@@ -13,6 +13,7 @@ import javafx.scene.text.TextAlignment;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,11 +33,13 @@ public class GameManager {
     private int lives;
     private long score;
     private int myLevel;
+    private List<Ball> balls;
 
     /**
      * Constructor to create a GameManager object
      * @param width     int width for the entire scene
      * @param height    int height for the entire scene
+     * @throws FileNotFoundException
      */
     public GameManager (double width, double height) throws FileNotFoundException {
         sceneWidth = width;
@@ -76,21 +79,39 @@ public class GameManager {
 
     /**
      * Accessor for the current Scene
-     * @return myScene, the current Scene
+     * @return myScene      the current Scene
      */
     public Scene getMyScene() {
         return myScene;
     }
 
     /**
+     * Accessor for the balls
+     * @return balls        the player balls
+     */
+    public List<Ball> getBalls() {
+        return balls;
+    }
+
+    /**
      * Creates the game environment, with player, blocks, and all other entities
      * @return Scene with all game elements
+     * @throws FileNotFoundException
      */
-    private Scene setupGame(int level) {
+    private Scene setupGame(int level) throws FileNotFoundException {
         Group root = new Group();
+
+        balls = new ArrayList<Ball>();
+        balls.add(new Ball());
+
+        //TODO: FINISH
+
+        balls.get(0).setxVelocity(2); //TODO: TEST
+        balls.get(0).setyVelocity(1);
 
 
         root.getChildren().addAll(getToolBar());
+        root.getChildren().addAll(balls);
         return new Scene(root, sceneWidth, sceneHeight, BACKGROUND);
     }
 
