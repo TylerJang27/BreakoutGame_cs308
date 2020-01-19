@@ -45,7 +45,6 @@ public abstract class Entity extends Circle {
      */
     public void setxVelocity(double vel) {
         xVelocity = vel;
-        calcRad();
     }
 
     /**
@@ -54,7 +53,6 @@ public abstract class Entity extends Circle {
      */
     public void setyVelocity(double vel) {
         yVelocity = vel;
-        calcRad();
     }
 
     /**

@@ -87,6 +87,17 @@ public class Main extends Application {
             myGameManager.step(elapsedTime);
         }
         stage.setScene(myScene);
+
+        //adds key input
+        if (myScene.getOnKeyPressed() == null) {
+            myScene.setOnKeyPressed(e -> {
+                try {
+                    handleKeyInput(e.getCode(), elapsedTime);
+                } catch (FileNotFoundException ex) {
+                    ex.printStackTrace();
+                }
+            });
+        }
     }
 
     /**
@@ -94,7 +105,7 @@ public class Main extends Application {
      * @param code Keyboard input
      * @throws FileNotFoundException
      */
-    private void handleKeyInput (KeyCode code) throws FileNotFoundException {
+    private void handleKeyInput (KeyCode code, double elapsedTime) throws FileNotFoundException {
         if (code == KeyCode.DIGIT8) {
             //Critical Hit
 
@@ -121,15 +132,24 @@ public class Main extends Application {
 
         } else if (code == KeyCode.SPACE) {
 
-
         } else if (code == KeyCode.LEFT) {
-
-
+            //moves paddle left
+            myGameManager.getPaddle().moveLeft(elapsedTime);
         } else if (code == KeyCode.RIGHT) {
-
-
+            //moves paddle right
+            myGameManager.getPaddle().moveRight(elapsedTime);
         }
     }
+
+    /*private void handleKeyInput (KeyCode code, double elapsedTime) {
+        if (code == KeyCode.LEFT) {
+            //moves paddle left
+            myGameManager.getPaddle().moveLeft(elapsedTime);
+        } else if (code == KeyCode.RIGHT) {
+            //moves paddle right
+            myGameManager.getPaddle().moveRight(elapsedTime);
+        }
+    }*/
 
     /**
      * Start the game.

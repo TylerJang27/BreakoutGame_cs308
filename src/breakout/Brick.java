@@ -24,8 +24,8 @@ public class Brick extends Rectangle {
 
     /**
      * Constructor for Brick, taking a default size
-     * @param x     The x coordinate of the bottom left corner of the brick
-     * @param y     The y coordinate of the bottom left corner of the brick
+     * @param x     The x coordinate of the upper left corner of the brick
+     * @param y     The y coordinate of the upper left corner of the brick
      * @param hp    How many hit points the brick has
      * @param id    The id number of the brick
      * @throws FileNotFoundException
