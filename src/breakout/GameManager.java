@@ -21,7 +21,7 @@ public class GameManager {
     private static final Paint BACKGROUND = Main.BACKGROUND;
     private static final int DEFAULT_LIVES = 3;
     private static final int BEGINNING_DELAY = 100; //TODO: NO LONGER CONSTANT, ONCE RELEASED
-    public static final int BOUNCE_FACTOR = 20;
+    public static final int BOUNCE_FACTOR = 5;
 
     private double elapsedGameTime;
     private double sceneWidth;
@@ -199,12 +199,12 @@ public class GameManager {
             if (b.getCenterX() >= paddle.getX() && b.getCenterX() <= paddle.getX() + paddle.getWidth()) {
                 if (b.getCenterY() + b.getRadius() >= paddle.getY()) {
                     b.collideFlatHoriz();
-                    double dx = b.getCenterX() - (paddle.getX() - paddle.getWidth() / 2);
+                    double dx = b.getCenterX() - (paddle.getX() + paddle.getWidth() / 2);
                     double dy = b.getCenterY() - paddle.getY();
-                    dx /= 2;
+                    dx /= 4;
                     double speed = b.calcSpeed();
-                    double xVel = b.getxVelocity() - dx / BOUNCE_FACTOR;
-                    double yVel = -1 * Math.abs(b.getyVelocity() + dy / BOUNCE_FACTOR);
+                    double xVel = b.getxVelocity() + dx / BOUNCE_FACTOR;
+                    double yVel = -1 * Math.abs(b.getyVelocity() - dy / BOUNCE_FACTOR);
                     xVel *= speed / Math.sqrt(xVel * xVel + yVel * yVel);
                     yVel *= speed / Math.sqrt(xVel * xVel + yVel * yVel);
                     b.setxVelocity(xVel);
