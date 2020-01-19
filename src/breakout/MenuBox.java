@@ -30,8 +30,8 @@ public class MenuBox extends Rectangle {
     /**
      * Constructor to create a MenuBox object
      * Used for instances like startBox, helpBox, etc.
-     * @param x         x coordinate of bottom left corner
-     * @param y         y coordinate of bottom left corner
+     * @param x         x coordinate of top left corner
+     * @param y         y coordinate of top left corner
      * @param width     width of rectangle
      * @param height    height of rectangle
      * @param color     color of rectangle

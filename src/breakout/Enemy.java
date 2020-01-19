@@ -1,7 +1,13 @@
 package breakout;
 
-import javafx.scene.shape.Shape;
+import javafx.scene.shape.Circle;
 
-public class Enemy extends Shape {
+/**
+ * This class includes the Boss and its implementation
+ */
+public class Enemy extends Circle {
+
+    private int hp;
+    private int id;
 
 }

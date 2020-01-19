@@ -21,8 +21,10 @@ import java.util.List;
  * A class to handle all of the scenes and nodes associated with the Game environment
  */
 public class GameManager {
-    public static final double SIZE = Main.SIZE;
+    public static final double BRICK_WIDTH = Main.WIDTH / 15;
+    public static final double BRICK_HEIGHT = Main.HEIGHT / 15;
 
+    private static final double SIZE = Main.SIZE;
     private static final Paint BACKGROUND = Main.BACKGROUND;
     private static final int DEFAULT_LIVES = 3;
     private static final int BEGINNING_DELAY = 1; //TODO: NO LONGER CONSTANT, ONCE RELEASED
@@ -37,8 +39,8 @@ public class GameManager {
     private long score;
     private int myLevel;
     private List<Ball> balls;
-    private List<Enemy> bricks;
-    private List<Enemy> collidables;
+    private List<Brick> bricks;
+    private List<Enemy> enemies;
 
     /**
      * Constructor to create a GameManager object
@@ -58,8 +60,9 @@ public class GameManager {
     /**
      * Resets all game settings, including lives, level, and score
      * @param level     The level to reset to
+     * @throws FileNotFoundException
      */
-    public void initializeSettings(int level) {
+    public void initializeSettings(int level) throws FileNotFoundException {
         lives = DEFAULT_LIVES;
         score = 0;
         elapsedGameTime = 0;
@@ -69,12 +72,13 @@ public class GameManager {
     /**
      * Sets the level counter to level
      * @param level     The level to reset to
+     * @throws FileNotFoundException
      */
-    public void setLevel(int level) {
+    public void setLevel(int level) throws FileNotFoundException {
         myLevel = level;
-        bricks = new ArrayList<Enemy>(); //TODO: EXPAND TO BE LEVEL INITIALIZER
-        collidables = new ArrayList<Enemy>();
-        collidables.addAll(bricks);
+        bricks = new ArrayList<Brick>(); //TODO: EXPAND TO BE LEVEL INITIALIZER
+        enemies = new ArrayList<Enemy>();
+        bricks.add(new Brick(0, BRICK_HEIGHT + BRICK_HEIGHT / 2, 3, 0));
     }
 
     /**
@@ -118,8 +122,8 @@ public class GameManager {
         balls.get(0).setxVelocity(120); //TODO: TEST
         balls.get(0).setyVelocity(75);
 
-
         root.getChildren().addAll(getToolBar());
+        root.getChildren().addAll(bricks);
         root.getChildren().addAll(balls);
         return new Scene(root, sceneWidth, sceneHeight, BACKGROUND);
     }

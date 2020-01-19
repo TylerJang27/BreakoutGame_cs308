@@ -97,9 +97,9 @@ public abstract class Entity extends Circle {
     public void calcRad() {
         speed = Math.sqrt(xVelocity * xVelocity + yVelocity + yVelocity);
         if (xVelocity == 0) {
-            direction = -1 * Math.PI / 2 * yVelocity / Math.abs(yVelocity);
+            direction = Math.PI / 2 * yVelocity / Math.abs(yVelocity);
         } else if (xVelocity < 0) {
-            direction = Math.PI - Math.atan(yVelocity / xVelocity);
+            direction = Math.PI + Math.atan(yVelocity / xVelocity);
         } else {
             direction = Math.atan(yVelocity / xVelocity);
         }

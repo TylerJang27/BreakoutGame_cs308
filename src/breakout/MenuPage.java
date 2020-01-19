@@ -90,7 +90,11 @@ public class MenuPage {
         EventHandler <MouseEvent> startHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent e) {
-                myGameManager.initializeSettings(1);
+                try {
+                    myGameManager.initializeSettings(1);
+                } catch (FileNotFoundException ex) {
+                    ex.printStackTrace();
+                }
                 myScene = myGameManager.getMyScene();
             }
         };
@@ -147,21 +151,33 @@ public class MenuPage {
         EventHandler <MouseEvent> level1Handler = new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent e) {
-                myGameManager.initializeSettings(1);
+                try {
+                    myGameManager.initializeSettings(1);
+                } catch (FileNotFoundException ex) {
+                    ex.printStackTrace();
+                }
                 myScene = myGameManager.getMyScene();
             }
         };
         EventHandler <MouseEvent> level2Handler = new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent e) {
-                myGameManager.initializeSettings(2);
+                try {
+                    myGameManager.initializeSettings(2);
+                } catch (FileNotFoundException ex) {
+                    ex.printStackTrace();
+                }
                 myScene = myGameManager.getMyScene();
             }
         };
         EventHandler <MouseEvent> level3Handler = new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent e) {
-                myGameManager.initializeSettings(3);
+                try {
+                    myGameManager.initializeSettings(3);
+                } catch (FileNotFoundException ex) {
+                    ex.printStackTrace();
+                }
                 myScene = myGameManager.getMyScene();
             }
         };

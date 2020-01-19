@@ -86,8 +86,9 @@ public class Main extends Application {
     /**
      * Handles input for all the cheat codes
      * @param code Keyboard input
+     * @throws FileNotFoundException
      */
-    private void handleKeyInput (KeyCode code) {
+    private void handleKeyInput (KeyCode code) throws FileNotFoundException {
         if (code == KeyCode.DIGIT8) {
             //Critical Hit
 
