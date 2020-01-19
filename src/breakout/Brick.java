@@ -15,6 +15,7 @@ public class Brick extends Rectangle {
 
     private int hp;
     private int id;
+    private int powerup;
     private static final String HP_3 = "Resources/grey_brick.png";
     private static final String HP_2 = "Resources/red_brick.png";
     private static final String HP_1 = "Resources/blue_brick.png";
@@ -29,9 +30,10 @@ public class Brick extends Rectangle {
      * @param id    The id number of the brick
      * @throws FileNotFoundException
      */
-    public Brick(double x, double y, int hp, int id) throws FileNotFoundException {
+    public Brick(double x, double y, int hp, int id, int powerup) throws FileNotFoundException {
         super(x, y, BRICK_WIDTH, BRICK_HEIGHT);
         this.id = id;
+        this.powerup = powerup;
         this.setFill(Color.GREY);
         updateSkin();
     }

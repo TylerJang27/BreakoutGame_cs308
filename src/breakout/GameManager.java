@@ -78,7 +78,8 @@ public class GameManager {
         myLevel = level;
         bricks = new ArrayList<Brick>(); //TODO: EXPAND TO BE LEVEL INITIALIZER
         enemies = new ArrayList<Enemy>();
-        bricks.add(new Brick(0, BRICK_HEIGHT + BRICK_HEIGHT / 2, 3, 0));
+        //bricks.add(new Brick(0, BRICK_HEIGHT + BRICK_HEIGHT / 2, 3, 0));
+        
     }
 
     /**
