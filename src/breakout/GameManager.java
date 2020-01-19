@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
@@ -110,12 +111,12 @@ public class GameManager {
         Group root = new Group();
 
         balls = new ArrayList<Ball>();
-        balls.add(new Ball(0));
+        balls.add(new Ball());
 
         //TODO: FINISH
 
-        balls.get(0).setxVelocity(80); //TODO: TEST
-        balls.get(0).setyVelocity(50);
+        balls.get(0).setxVelocity(120); //TODO: TEST
+        balls.get(0).setyVelocity(75);
 
 
         root.getChildren().addAll(getToolBar());
@@ -137,6 +138,45 @@ public class GameManager {
     }
 
     /**
+     * Tests for collision with all objects
+     */
+    private void collision() {
+        wallCollision();
+        brickbossCollision();
+        //TODO: IMPLEMENT OTHER COLLISIONS
+        //TODO: IMPLEMENT PADDLE-BALL COLLISION
+        //TODO: IMPLEMENT BALL-BOSS COLLISION
+        //TODO: IMPELEMENT POWERUP-PADDLE COLLISION
+        //TODO: IMPLEMENT PADDLE-LASER COLLISION
+    }
+
+    /**
+     * Tests for all ball collisions with walls
+     */
+    private void wallCollision() {
+        for (int ball_counter = balls.size() - 1; ball_counter >= 0; ball_counter --) {
+            Ball b = balls.get(ball_counter);
+            if (b.getCenterX() - b.getRadius() <= 0 || b.getCenterX() + b.getRadius() >= Main.WIDTH) {
+                b.collideFlatVert();
+            } else if (b.getCenterY() - b.getRadius() <= Main.HEIGHT / 15) {
+                b.collideFlatHoriz();
+            } else if (b.getCenterY() + b.getRadius() >= Main.HEIGHT) {
+                //ball falls off screen
+                b.setCenterY(Main.HEIGHT * 2);
+                balls.remove(ball_counter);
+                System.out.println(balls.size() + "hi");
+            }
+        }
+    }
+
+    /**
+     * Tests for all ball collisions with bricks and boss
+     */
+    private void brickbossCollision() {
+        //TODO: IMPLEMENT
+    }
+
+    /**
      * Queues the next step for all balls and entities
      * @param elapsedTime   time since last step
      */
@@ -147,8 +187,9 @@ public class GameManager {
 
         if (started()) {
             for (Ball b : balls) {
-                b.step(elapsedTime, collidables);
+                b.step(elapsedTime);
             }
+            collision();
         }
         //TODO: add other elements and entities
     }

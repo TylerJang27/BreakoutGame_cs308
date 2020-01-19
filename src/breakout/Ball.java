@@ -18,40 +18,16 @@ public class Ball extends Entity {
      * Constructor for Ball, a child of Entity
      * @param image Image to fill the Ball
      */
-    public Ball(Image image, int id) {
-        super(image, id);
+    public Ball(Image image) {
+        super(image);
     }
 
     /**
      * Default constructor for Ball, a child of Entity
      * @throws FileNotFoundException
      */
-    public Ball(int id) throws FileNotFoundException {
-        this(new Image(new FileInputStream(BALL_PNG)), id);
-    }
-
-    /**
-     * When ball falls off map, remove in GameManager
-     * @return id   id for removal
-     */
-    private int die() {
-        return ID;
-    }
-
-    /**
-     * Tests for collision with any object
-     * @param collisionNodes    A list of nodes to test for collision
-     */
-    public int[] collision(List<Shape> collisionNodes) {
-        int[] collisions = {-1, -1};
-        if (this.getCenterX() - this.getRadius() <= 0 || this.getCenterX() + this.getRadius() >= Main.WIDTH) {
-            collideFlatVert();
-        } else if (this.getCenterY() - this.getRadius() <= Main.HEIGHT / 15) {
-            collideFlatHoriz();
-        } else if (this.getCenterY() + this.getRadius() >= Main.HEIGHT) {
-            collisions[0] = die();
-        } else if (onPaddle)
-        return collisions;
+    public Ball() throws FileNotFoundException {
+        this(new Image(new FileInputStream(BALL_PNG)));
     }
 
     /**

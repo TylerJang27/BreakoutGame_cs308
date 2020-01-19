@@ -19,33 +19,25 @@ public abstract class Entity extends Circle {
     private double yVelocity;
     private double speed;
     private double direction;
-    protected int ID;
 
     /**
      * Constructor for Entity, a parent of Ball and PowerUp
      * @param image     Image to fill the Entity
      */
-    public Entity (Image image, int id) {
+    public Entity (Image image) {
         super(Main.SIZE, Main.SIZE / 2, RADIUS);
         this.setFill(new ImagePattern(image));
-        this.ID = id;
     }
 
     /**
      * Steps in the established X and Y directions
      * @param elapsedTime   deltaT
      */
-    public void step(double elapsedTime, List<Shape> collisionNodes) {
+    public void step(double elapsedTime) {
         this.setCenterX(this.getCenterX() + xVelocity * elapsedTime);
         this.setCenterY(this.getCenterY() - yVelocity * elapsedTime);
         this.setRotate(this.getRotate() + speed / 40);
-        collision(collisionNodes);
     }
-
-    /**
-     * Checks for collision with other objects
-     */
-    public abstract int[] collision(List<Shape> collisionNodes);
 
     /**
      * Mutator for xVelocity
