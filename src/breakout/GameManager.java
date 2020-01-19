@@ -4,7 +4,6 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.paint.Paint;
-
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,7 @@ public class GameManager {
     private static final int DEFAULT_SPEED = 5;
     private static final Paint BACKGROUND = Main.BACKGROUND;
     private static final int DEFAULT_LIVES = 3;
-    private static final int DELAY_TIME = 500; //TODO: NO LONGER CONSTANT, ONCE RELEASED
+    private static final int DELAY_TIME = 500;
     public static final int BOUNCE_FACTOR = 5;
     private static final String LOSE_TEXT = "WASTED";
     private static final String WIN_TEXT = "YOU WIN!";
@@ -42,6 +41,7 @@ public class GameManager {
     private List<Ball> balls;
     private List<Brick> bricks;
     private List<Enemy> enemies;
+    private Group root;
 
     /**
      * Constructor to create a GameManager object
@@ -58,6 +58,7 @@ public class GameManager {
         bricks = new ArrayList<Brick>();
         enemies = new ArrayList<Enemy>();
         paddle = new Paddle(centerX, Main.HEIGHT * 9 / 10);
+        root = null;
         populateScene(1);
     }
 
@@ -82,6 +83,7 @@ public class GameManager {
     public void bonusLife() throws FileNotFoundException {
         lives += 1;
         getToolBar();
+        root.getChildren().add(myToolBar.resetHearts(lives));
     }
 
     /**
@@ -108,6 +110,7 @@ public class GameManager {
             paddle.setFreeze(false);
         } else if (powerup == 1) {      //multiball
             balls.add(new Ball());
+            root.getChildren().add(balls.get(balls.size() - 1));
         } else if (powerup == 2) {      //heavy ball
             lethality = 2;
         } else if (powerup == 3) {      //bonus life
@@ -259,11 +262,10 @@ public class GameManager {
                     double dx = b.getCenterX() - (paddle.getX() + paddle.getWidth() / 2);
                     double dy = b.getCenterY() - paddle.getY();
                     dx /= 4;
-                    double speed = b.calcSpeed();
                     double xVel = b.getxVelocity() + dx / BOUNCE_FACTOR;
                     double yVel = -1 * Math.abs(b.getyVelocity() - dy / BOUNCE_FACTOR);
-                    xVel *= speed / Math.sqrt(xVel * xVel + yVel * yVel);
-                    yVel *= speed / Math.sqrt(xVel * xVel + yVel * yVel);
+                    xVel *= DEFAULT_SPEED / Math.sqrt(xVel * xVel + yVel * yVel);
+                    yVel *= DEFAULT_SPEED / Math.sqrt(xVel * xVel + yVel * yVel);
                     b.setxVelocity(xVel);
                     b.setyVelocity(yVel);
                 }
@@ -317,7 +319,7 @@ public class GameManager {
      * @throws FileNotFoundException
      */
     public void populateScene(int level) throws FileNotFoundException {
-        Group root = new Group();
+        root = new Group(); //had to make instance in order to add new items (e.g. multiball, update ToolBar)
 
         balls = new ArrayList<Ball>();
         balls.add(new Ball());
@@ -327,7 +329,6 @@ public class GameManager {
 
         balls.get(0).setxVelocity(0);
         balls.get(0).setyVelocity(0);
-        balls.get(0).calcRad();
 
         root.getChildren().addAll(getToolBar());
         root.getChildren().addAll(bricks);
@@ -381,7 +382,7 @@ public class GameManager {
             }
             myScene.getRoot().getChildrenUnmodifiable().add(endText);
             if (elapsedGameTime > endTime + DELAY_TIME) {
-                //TODO: QUIT
+                Main.launch();
             }
         }
         //TODO: add other elements and entities

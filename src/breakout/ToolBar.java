@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class ToolBar {
 
-    private static String LIVES_PNG = "Resources/life.png";
+    private static String HEARTS = "Resources/life";
     private static String QUIT_PNG = "Resources/quit.png";
     private static String SCORE_PNG = "Resources/score.png";
     private static int MAX_LIFE_DISPLAY = 8;
@@ -31,7 +31,7 @@ public class ToolBar {
     private double sceneHeight;
     private double barHeight;
     private Rectangle blackBar;
-    private List<Node> heartList;
+    private ImageView hearts;
     private ImageView scoreImage;
     private Text scoreText;
     private ImageView quitImage;
@@ -67,7 +67,7 @@ public class ToolBar {
         EventHandler<MouseEvent> quitHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent e) {
-                //TODO: IMPLMENT RETURN TO MENU PAGE
+                //TODO: QUIT
             }
         };
 
@@ -77,13 +77,12 @@ public class ToolBar {
     /**
      * Creates a List of hearts representing lives
      * @param lives     the number of lives the player has left
+     * @return hearts   an ImageView of the lives left
      * @throws FileNotFoundException
      */
-    public void resetHearts(int lives) throws FileNotFoundException {
-        heartList = new ArrayList<Node>();
-        for (int lifeCounter = 0; lifeCounter < lives && lifeCounter < MAX_LIFE_DISPLAY; lifeCounter ++) {
-            heartList.add(new IconView(new Image(new FileInputStream(LIVES_PNG)), sceneWidth / 20 * lifeCounter, barHeight / 12, sceneWidth / 20, barHeight * 5 / 6, true));
-        }
+    public ImageView resetHearts(int lives) throws FileNotFoundException {
+        hearts = new IconView(new Image(new FileInputStream(HEARTS + Math.min(lives, 8) + ".png")), 0, barHeight / 12, sceneWidth / 5, barHeight * 5 / 6, false);
+        return hearts;
     }
 
     /**
@@ -102,7 +101,7 @@ public class ToolBar {
         List<Node> nodeList = new ArrayList<Node>();
 
         nodeList.add(blackBar);
-        nodeList.addAll(heartList);
+        nodeList.add(hearts);
         nodeList.add(scoreImage);
         nodeList.add(scoreText);
         nodeList.add(quitImage);
