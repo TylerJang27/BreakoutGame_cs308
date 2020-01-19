@@ -41,6 +41,8 @@ public class GameManager {
     private List<Ball> balls;
     private List<Brick> bricks;
     private List<Enemy> enemies;
+    private List<Laser> lasers;
+    private List<Powerup> powerups;
     private Group root;
 
     /**
@@ -187,8 +189,8 @@ public class GameManager {
         wallCollision();
         brickCollision();
         paddleCollision();
-        //TODO: IMPLEMENT PADDLE-BALL COLLISION
-        //TODO: IMPLEMENT BALL-BOSS COLLISION
+        enemyCollision();
+
         //TODO: IMPELEMENT POWERUP-PADDLE COLLISION
         //TODO: IMPLEMENT PADDLE-LASER COLLISION
     }
@@ -212,7 +214,7 @@ public class GameManager {
     }
 
     /**
-     * Tests for all ball collisions with bricks and boss
+     * Tests for all ball collisions with bricks
      * @throws FileNotFoundException
      */
     private void brickCollision() throws FileNotFoundException {
@@ -245,6 +247,26 @@ public class GameManager {
                             getToolBar();
                         }
                         break;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Tests for all ball collisions with boss, allowing for scalability
+     * @throws FileNotFoundException
+     */
+    private void enemyCollision() throws FileNotFoundException {
+        for (Ball b: balls) {
+            for (int enemyCount = enemies.size() - 1; enemyCount >= 0; enemyCount ++) {
+                Enemy e = enemies.get(enemyCount);
+                double distance = Math.sqrt(Math.pow(b.getCenterX() - e.getCenterX(), 2) + Math.pow(b.getCenterY() - e.getCenterY(), 2));
+                if (distance < b.getRadius() + e.getRadius()) {
+                    score += 5;
+                    getToolBar();
+                    if (e.takeDamage(lethality) == 0) {
+                        enemies.remove(enemyCount);
                     }
                 }
             }
@@ -308,7 +330,9 @@ public class GameManager {
                     }
                 }
             }
-            //TODO: ADD ENEMY
+            if (myLevel == 3) {
+                enemies.add(new Enemy());
+            }
             populateScene(level);
         }
     }
@@ -332,6 +356,7 @@ public class GameManager {
 
         root.getChildren().addAll(getToolBar());
         root.getChildren().addAll(bricks);
+        root.getChildren().addAll(enemies);
         root.getChildren().addAll(balls);
         root.getChildren().add(paddle);
         myScene = new Scene(root, sceneWidth, sceneHeight, BACKGROUND);
@@ -346,12 +371,15 @@ public class GameManager {
         elapsedGameTime += elapsedTime;
         double endTime = 0;
 
-        if (alive()) {
-            if (elapsedGameTime < powerupStart + powerupDelay) {
-                paddle.setFreeze(false);
-            } else {
-                powerupStart = Double.MIN_VALUE;
-                lethality = 1;
+        if (alive()) { //TODO: EXTRACT METHODS AND SHORTEN
+            powerupUpdate();
+            for (Enemy e: enemies) {
+                e.step();
+                if (Math.round(elapsedGameTime) % 80 == 0) {
+                    Laser l = new Laser();
+                    lasers.add(l);
+                    root.getChildren().add(l);
+                }
             }
             for (Ball b: balls) {
                 if (!b.getLaunched()) {
@@ -386,6 +414,18 @@ public class GameManager {
             }
         }
         //TODO: add other elements and entities
+    }
+
+    /**
+     * Handles the status of the powerups and updating their values in step
+     */
+    private void powerupUpdate() {
+        if (elapsedGameTime < powerupStart + powerupDelay) {
+            paddle.setFreeze(false);
+        } else {
+            powerupStart = Double.MIN_VALUE;
+            lethality = 1;
+        }
     }
 
 
