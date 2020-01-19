@@ -18,6 +18,7 @@ public class Ball extends Entity {
      */
     public Ball(Image image) {
         super(image);
+
     }
 
     /**
@@ -28,6 +29,26 @@ public class Ball extends Entity {
         this(new Image(new FileInputStream(BALL_PNG)));
     }
 
+    public void collision() {
+        if (this.getCenterX() - this.getRadius() <= 0 || this.getCenterX() + this.getRadius() >= Main.WIDTH) {
+            collideFlatVert();
+        } else if (this.getCenterY() - this.getRadius() <= Main.HEIGHT / 15) {
+            collideFlatHoriz();
+        }
+    }
 
+    /**
+     * Registers a collision with a flat vertical surface
+     */
+    public void collideFlatVert() {
+        this.setxVelocity(-1 * this.getX());
+    }
+
+    /**
+     * Registers a collision with a flat horizontal surface
+     */
+    public void collideFlatHoriz() {
+        this.setyVelocity(-1 * this.getY());
+    }
 
 }

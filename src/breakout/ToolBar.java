@@ -49,7 +49,6 @@ public class ToolBar {
         sceneWidth = width;
         sceneHeight = height;
         barHeight = sceneHeight / 15;
-        System.out.println(barHeight);
 
         blackBar = new Rectangle(0, 0, sceneWidth, barHeight);
         blackBar.setFill(Color.BLACK);

@@ -9,9 +9,9 @@ import javafx.scene.shape.Circle;
  *          Ball
  *          Power Up
  */
-public class Entity extends Circle {
+public abstract class Entity extends Circle {
 
-    private static double RADIUS = Main.SIZE / 20;
+    private static double RADIUS = Main.SIZE / 30;
     private double xVelocity;
     private double yVelocity;
     private double speed;
@@ -32,17 +32,15 @@ public class Entity extends Circle {
      */
     public void step(double elapsedTime) {
         this.setCenterX(this.getCenterX() + xVelocity * elapsedTime);
-        this.setCenterY(this.getCenterY() + yVelocity * elapsedTime);
-        this.setRotate(this.getRotate() + speed / 10);
+        this.setCenterY(this.getCenterY() - yVelocity * elapsedTime);
+        this.setRotate(this.getRotate() + speed / 40);
+        collision();
     }
 
     /**
-     * Returns the radius of the Entity
-     * @return RADIUS       constant RADIUS
+     * Checks for collision with other objects
      */
-    public double getRADIUS() {
-        return RADIUS;
-    }
+    public abstract void collision();
 
     /**
      * Mutator for xVelocity
@@ -60,24 +58,6 @@ public class Entity extends Circle {
     public void setyVelocity(double vel) {
         yVelocity = vel;
         calcRad();
-    }
-
-    /**
-     * Mutator for direction
-     * @param dir   the new direction
-     */
-    public void setDirection(double dir) {
-        direction = dir;
-        calcXY();
-    }
-
-    /**
-     * Mutator for speed
-     * @param spd   the new speed
-     */
-    public void setSpeed(double spd) {
-        speed = spd;
-        calcXY();
     }
 
     /**
@@ -99,29 +79,19 @@ public class Entity extends Circle {
     }
 
     /**
-     * Calculates the X and Y velocity based on speed and direction
+     * Accessor for the y velocity
      * @return xVelocity    the velocity of travel in the horizontal direction
      */
-    public double calcX() {
-        calcXY();
+    public double getX() {
         return xVelocity;
     }
 
     /**
-     * Calculates the X and Y velocity based on speed and direction
+     * Accessor for the y velocity
      * @return yVelocity    the velocity of travel in the vertical direction
      */
-    public double calcY() {
-        calcXY();
+    public double getY() {
         return yVelocity;
-    }
-
-    /**
-     * Calculates the X and Y velocity based on speed and direction
-     */
-    public void calcXY() {
-        xVelocity = Math.cos(direction) * speed;
-        yVelocity = Math.sin(direction) * speed;
     }
 
     /**
@@ -130,7 +100,7 @@ public class Entity extends Circle {
     public void calcRad() {
         speed = Math.sqrt(xVelocity * xVelocity + yVelocity + yVelocity);
         if (xVelocity == 0) {
-            direction = Math.PI / 2;
+            direction = -1 * Math.PI / 2 * yVelocity / Math.abs(yVelocity);
         } else if (xVelocity < 0) {
             direction = Math.PI - Math.atan(yVelocity / xVelocity);
         } else {

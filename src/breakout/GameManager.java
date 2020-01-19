@@ -24,7 +24,9 @@ public class GameManager {
 
     private static final Paint BACKGROUND = Main.BACKGROUND;
     private static final int DEFAULT_LIVES = 3;
+    private static final int BEGINNING_DELAY = 1; //TODO: NO LONGER CONSTANT, ONCE RELEASED
 
+    private double elapsedGameTime;
     private double sceneWidth;
     private double sceneHeight;
     private double centerX;
@@ -57,6 +59,7 @@ public class GameManager {
     public void initializeSettings(int level) {
         lives = DEFAULT_LIVES;
         score = 0;
+        elapsedGameTime = 0;
         setLevel(level);
     }
 
@@ -106,13 +109,42 @@ public class GameManager {
 
         //TODO: FINISH
 
-        balls.get(0).setxVelocity(2); //TODO: TEST
-        balls.get(0).setyVelocity(1);
+        balls.get(0).setxVelocity(80); //TODO: TEST
+        balls.get(0).setyVelocity(50);
 
 
         root.getChildren().addAll(getToolBar());
         root.getChildren().addAll(balls);
         return new Scene(root, sceneWidth, sceneHeight, BACKGROUND);
+    }
+
+    /**
+     * Accessor for elapsedGametime
+     * @return elapsedGameTime
+     */
+    public double getElapsedGameTime() {
+        return elapsedGameTime;
+    }
+
+    //TODO: COMMENTS
+    private boolean started() {
+        return elapsedGameTime > BEGINNING_DELAY;
+    }
+
+    /**
+     * Queues the next step for all balls and entities
+     * @param elapsedTime   time since last step
+     */
+    public void step(double elapsedTime) {
+        elapsedGameTime += elapsedTime;
+        System.out.println(started());
+        System.out.println(elapsedGameTime);
+        if (started()) {
+            for (Ball b : balls) {
+                b.step(elapsedTime);
+            }
+        }
+        //TODO: add other elements and entities
     }
 
 

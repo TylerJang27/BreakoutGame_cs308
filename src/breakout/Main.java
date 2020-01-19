@@ -24,8 +24,8 @@ public class Main extends Application {
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     public static final Paint BACKGROUND = Color.CADETBLUE;
 
-    private static final int WIDTH = SIZE * 2;
-    private static final int HEIGHT = SIZE;
+    public static final int WIDTH = SIZE * 2;       //TODO: REFACTOR ALL SCENE HEIGHT, SCENE WIDTH, WIDTH, HEIGHT
+    public static final int HEIGHT = SIZE;
 
     private MenuPage myMenu;
     private GameManager myGameManager;
@@ -57,7 +57,11 @@ public class Main extends Application {
         animation.play();
     }
 
-    //public void setupGame() { } //TODO: FIGURE OUT
+    //TODO: COMMENTS
+    public void startGame() {
+        myScene = myGameManager.getMyScene();
+        inGame = true;
+    }
 
     //private void handleMouseInput(double x, double y) { }
 
@@ -67,7 +71,15 @@ public class Main extends Application {
      * @param stage         Stage on which to show game
      */
     private void step (double elapsedTime, Stage stage) {
-        myScene = myMenu.getMyScene();
+        if (!inGame) {
+            myScene = myMenu.getMyScene();
+            if (myScene.equals(myGameManager.getMyScene())) {
+                startGame();
+            }
+        } else {
+            myScene = myGameManager.getMyScene();
+            myGameManager.step(elapsedTime);
+        }
         stage.setScene(myScene);
     }
 
@@ -84,18 +96,30 @@ public class Main extends Application {
 
         } else if (code == KeyCode.DIGIT1) {
             //Start level 1
-
+            myGameManager.initializeSettings(1);
+            myScene = myGameManager.getMyScene();
         } else if (code == KeyCode.DIGIT2) {
             //Start level 2
-
+            myGameManager.initializeSettings(2);
+            myScene = myGameManager.getMyScene();
         } else if (code == KeyCode.DIGIT3) {
             //Start level 3
-
+            myGameManager.initializeSettings(3);
+            myScene = myGameManager.getMyScene();
         } else if (code == KeyCode.L) {
             //Add extra levels
 
         } else if (code == KeyCode.R) {
             //Reset to starting position
+
+        } else if (code == KeyCode.SPACE) {
+
+
+        } else if (code == KeyCode.LEFT) {
+
+
+        } else if (code == KeyCode.RIGHT) {
+
 
         }
     }
