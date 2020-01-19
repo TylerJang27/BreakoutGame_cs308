@@ -31,7 +31,6 @@ public class GameManager {
     private double powerupStart;
     private double freezeStart;
     private double powerupDelay;
-    private boolean win;
     private Scene myScene;
     private ToolBar myToolBar;
     private int lives;
@@ -73,7 +72,6 @@ public class GameManager {
      */
     public void initializeSettings() {
         lethality = 1;
-        win = false;
         powerupStart = Double.MIN_VALUE;
         freezeStart = Double.MIN_VALUE;
         powerupDelay = 0;
@@ -182,7 +180,7 @@ public class GameManager {
      * @return whether or not game is viable
      */
     private boolean alive() {
-        return lives > 0 && !win;
+        return lives > 0 && myLevel <= 3;
     }
 
     /**
@@ -299,10 +297,12 @@ public class GameManager {
      */
     private void enemyCollision() throws FileNotFoundException {
         for (Ball b: balls) {
-            for (int enemyCount = enemies.size() - 1; enemyCount >= 0; enemyCount ++) {
+            for (int enemyCount = enemies.size() - 1; enemyCount >= 0; enemyCount --) {
                 Enemy e = enemies.get(enemyCount);
                 double distance = Math.sqrt(Math.pow(b.getCenterX() - e.getCenterX(), 2) + Math.pow(b.getCenterY() - e.getCenterY(), 2));
                 if (distance < b.getRadius() + e.getRadius()) {
+                    b.collideFlatHoriz();
+                    b.collideFlatVert();
                     score += 5;
                     getToolBar();
                     if (e.takeDamage(lethality) == 0) {
@@ -426,7 +426,9 @@ public class GameManager {
             powerupUpdate(elapsedTime);
             freezeUpdate();
             for (Enemy e: enemies) {
-                e.step();
+                if (Math.round(elapsedGameTime) % 5 == 0) {
+                    e.step();
+                }
                 if (Math.round(elapsedGameTime) % 80 == 0) {
                     Laser l = new Laser();
                     lasers.add(l);
@@ -451,27 +453,27 @@ public class GameManager {
                 lives -= 1;
                 populateScene(myLevel);
             }
-            if (bricks.isEmpty()) {
+            if (bricks.isEmpty() && enemies.isEmpty()) {
                 myLevel += 1;
                 score += 100;
                 getToolBar();
                 setLevel(myLevel);
+                System.out.println(myLevel);
             }
             endTime = elapsedGameTime;
 
         } else {
             MenuText endText;
             if (lives <= 0) {   //Lose
-                endText = new MenuText(0, Main.HEIGHT, LOSE_TEXT, Main.TITLE_FONT);
+                endText = new MenuText(Main.WIDTH / 2, Main.HEIGHT / 2, LOSE_TEXT, Main.TITLE_FONT);
             } else {            //Win
-                endText = new MenuText(0, Main.HEIGHT, WIN_TEXT, Main.TITLE_FONT);
+                endText = new MenuText(Main.WIDTH / 2, Main.HEIGHT / 2, WIN_TEXT, Main.TITLE_FONT);
             }
-            myScene.getRoot().getChildrenUnmodifiable().add(endText);
+            root.getChildren().add(endText);
             if (elapsedGameTime > endTime + DELAY_TIME) {
-                Main.launch();
+                //TODO: QUIT
             }
         }
-        //TODO: add other elements and entities
     }
 
     /**

@@ -81,7 +81,7 @@ public class ToolBar {
      * @throws FileNotFoundException
      */
     public ImageView resetHearts(int lives) throws FileNotFoundException {
-        hearts = new IconView(new Image(new FileInputStream(HEARTS + Math.min(lives, 8) + ".png")), 0, barHeight / 12, sceneWidth / 5, barHeight * 5 / 6, false);
+        hearts = new IconView(new Image(new FileInputStream(HEARTS + Math.max(Math.min(lives, 8), 0) + ".png")), 0, barHeight / 12, sceneWidth / 5, barHeight * 5 / 6, false);
         return hearts;
     }
 

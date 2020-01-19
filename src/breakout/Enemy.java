@@ -12,9 +12,9 @@ import java.util.List;
  * This class includes the Boss and its implementation
  */
 public class Enemy extends Entity {
-    
+
     private static final int BOSS_MAX_HEALTH = 20;
-    private static final String SKIN_PATH = "Resoruces/dr_brick_";
+    private static final String SKIN_PATH = "Resources/dr_brick_";
     private List<Image> skins;
     private int hp;
     private int id;
@@ -24,12 +24,13 @@ public class Enemy extends Entity {
         super(new Image(new FileInputStream(SKIN_PATH + "1.png")));
         skins = new ArrayList<Image>();
         for (skinCounter = 1; skinCounter <= 4; skinCounter ++) {
-            skins.set(skinCounter - 1, new Image(new FileInputStream(SKIN_PATH + skinCounter + ".png")));
+            skins.add(new Image(new FileInputStream(SKIN_PATH + skinCounter + ".png")));
         }
+        skinCounter = 0;
         hp = BOSS_MAX_HEALTH;
         this.setCenterX(Main.WIDTH / 2);
         this.setCenterY(Main.HEIGHT / 4);
-        this.setRadius(Main.WIDTH / 3);
+        this.setRadius(Main.WIDTH / 12);
     }
 
     public int takeDamage(int damage) {
@@ -42,11 +43,13 @@ public class Enemy extends Entity {
     }
 
     public void step() {
+        System.out.println(skinCounter);
         this.setFill(new ImagePattern(skins.get(skinCounter)));
-        if (skinCounter >= 4) {
+        if (skinCounter >= 3) {
             skinCounter = 0;
         } else {
             skinCounter += 1;
         }
+        System.out.println(skinCounter);
     }
 }
