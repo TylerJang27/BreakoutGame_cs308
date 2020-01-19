@@ -36,6 +36,8 @@ public class GameManager {
     private long score;
     private int myLevel;
     private List<Ball> balls;
+    private List<Enemy> bricks;
+    private List<Enemy> collidables;
 
     /**
      * Constructor to create a GameManager object
@@ -69,6 +71,9 @@ public class GameManager {
      */
     public void setLevel(int level) {
         myLevel = level;
+        bricks = new ArrayList<Enemy>(); //TODO: EXPAND TO BE LEVEL INITIALIZER
+        collidables = new ArrayList<Enemy>();
+        collidables.addAll(bricks);
     }
 
     /**
@@ -105,7 +110,7 @@ public class GameManager {
         Group root = new Group();
 
         balls = new ArrayList<Ball>();
-        balls.add(new Ball());
+        balls.add(new Ball(0));
 
         //TODO: FINISH
 
@@ -139,9 +144,10 @@ public class GameManager {
         elapsedGameTime += elapsedTime;
         System.out.println(started());
         System.out.println(elapsedGameTime);
+
         if (started()) {
             for (Ball b : balls) {
-                b.step(elapsedTime);
+                b.step(elapsedTime, collidables);
             }
         }
         //TODO: add other elements and entities

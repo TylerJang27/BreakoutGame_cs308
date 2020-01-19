@@ -3,6 +3,9 @@ package breakout;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
+
+import java.util.List;
 
 /**
  * A class to handle all the following in-game entities:
@@ -16,31 +19,33 @@ public abstract class Entity extends Circle {
     private double yVelocity;
     private double speed;
     private double direction;
+    protected int ID;
 
     /**
      * Constructor for Entity, a parent of Ball and PowerUp
      * @param image     Image to fill the Entity
      */
-    public Entity (Image image) {
+    public Entity (Image image, int id) {
         super(Main.SIZE, Main.SIZE / 2, RADIUS);
         this.setFill(new ImagePattern(image));
+        this.ID = id;
     }
 
     /**
      * Steps in the established X and Y directions
      * @param elapsedTime   deltaT
      */
-    public void step(double elapsedTime) {
+    public void step(double elapsedTime, List<Shape> collisionNodes) {
         this.setCenterX(this.getCenterX() + xVelocity * elapsedTime);
         this.setCenterY(this.getCenterY() - yVelocity * elapsedTime);
         this.setRotate(this.getRotate() + speed / 40);
-        collision();
+        collision(collisionNodes);
     }
 
     /**
      * Checks for collision with other objects
      */
-    public abstract void collision();
+    public abstract int[] collision(List<Shape> collisionNodes);
 
     /**
      * Mutator for xVelocity
