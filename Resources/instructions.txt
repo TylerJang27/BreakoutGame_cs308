@@ -1,0 +1,9 @@
+Welcome to Brick Bonanza!
+
+Break all of the bricks in each level, and beat the evil Dr. Brick.
+
+Use the arrow keys to move your paddle about.
+Press space to launch the ball.
+Make sure to catch powerups!
+
+You have 3 lives. Good luck!

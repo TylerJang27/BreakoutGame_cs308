@@ -16,6 +16,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Scene;
@@ -95,7 +96,11 @@ public class MenuPage {
         EventHandler <MouseEvent> helpHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent e) {
-                myScene = setupHelp();
+                try {
+                    myScene = setupHelp();
+                } catch (FileNotFoundException ex) {
+                    ex.printStackTrace();
+                }
             }
         };
 
@@ -130,7 +135,7 @@ public class MenuPage {
     private Scene setupLevel() throws FileNotFoundException {
         Group root = new Group();
 
-        MenuText titleText = new MenuText(centerX, sceneHeight / 8, LEVEL_TEXT, TITLE_FONT);
+        MenuText titleText = new MenuText(centerX, sceneHeight / 6, LEVEL_TEXT, TITLE_FONT);
 
         String level = LEVEL_TEXT.substring(0, LEVEL_TEXT.length() - 1) + " ";
 
@@ -156,18 +161,22 @@ public class MenuPage {
      * Creates the Help page, with description and back button
      * @return Scene of the Help page
      */
-    private Scene setupHelp() {
+    private Scene setupHelp() throws FileNotFoundException {
         Group root = new Group();
 
-        MenuText titleText = new MenuText(centerX, sceneHeight / 8, HELP_TEXT, TITLE_FONT);
+        MenuText titleText = new MenuText(centerX, sceneHeight / 6, HELP_TEXT, TITLE_FONT);
 
-        
+        String instructions = TextReader.readFile("Resources/instructions.txt");
+        MenuText instructionsText = new MenuText(centerX, sceneHeight / 3, instructions, new Font("Calibri", BOX_SIZE / 12));
+        instructionsText.setTextAlignment(TextAlignment.CENTER);
+
         //TODO: ADD ICONS
 
         MenuBox backButton = new MenuBox(sceneWidth / 10, sceneHeight / 10, BOX_HEIGHT, BOX_HEIGHT, Color.DARKGREY, "", new Image(new FileInputStream("Resources/back.png")));
         backButton.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, backHandler);
 
         root.getChildren().add(titleText);
+        root.getChildren().add(instructionsText);
         root.getChildren().addAll(backButton.getAllNodes());
         return new Scene(root, sceneWidth, sceneHeight, BACKGROUND);
     }
