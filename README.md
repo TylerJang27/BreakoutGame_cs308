@@ -7,7 +7,7 @@ Name: Tyler Jang
 
 ### Timeline
 
-Start Date: January 12, 2020
+Start Date: January 16, 2020
 
 Finish Date: 
 
