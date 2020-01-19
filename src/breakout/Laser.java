@@ -7,11 +7,15 @@ import javafx.scene.shape.Rectangle;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+/**
+ * A class for the Lasers that the Enemy releases at the player
+ * They migrate down with each step
+ */
 public class Laser extends Rectangle {
 
     private static double LASER_WIDTH = Main.WIDTH / 100;
     private static double LASER_HEIGHT = LASER_WIDTH * 10;
-    private static double LASER_SPEED = 15;
+    private static double LASER_SPEED = 8;
     private static String LASER_PNG = "Resources/laser.png";
 
     /**

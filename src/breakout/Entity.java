@@ -21,11 +21,21 @@ public abstract class Entity extends Circle {
     private double direction;
 
     /**
-     * Constructor for Entity, a parent of Ball and PowerUp
+     * Constructor for Entity, a parent of Ball and Powerup
      * @param image     Image to fill the Entity
      */
     public Entity (Image image) {
-        super(Main.SIZE, Main.SIZE * 3 / 4, RADIUS);
+        this(image, Main.SIZE, Main.SIZE * 3 / 4);
+    }
+
+    /**
+     * Expanded constructor for Entity, a parent of Ball and Powerup
+     * @param image     Image to fill the Entity
+     * @param x         Location of centerX
+     * @param y         Location of centerY
+     */
+    public Entity(Image image, double x, double y) {
+        super(x, y, RADIUS);
         this.setFill(new ImagePattern(image));
     }
 

@@ -12,9 +12,9 @@ import java.util.List;
  * This class includes the Boss and its implementation
  */
 public class Enemy extends Entity {
-
+    
     private static final int BOSS_MAX_HEALTH = 20;
-    private static final String SKIN_PATH = "dr_brick_";
+    private static final String SKIN_PATH = "Resoruces/dr_brick_";
     private List<Image> skins;
     private int hp;
     private int id;

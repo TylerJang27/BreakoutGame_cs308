@@ -55,6 +55,14 @@ public class Brick extends Rectangle {
     }
 
     /**
+     * Returns the powerup id
+     * @return powerup  the powerup id, -1 to 4
+     */
+    public int getPowerup() {
+        return powerup;
+    }
+
+    /**
      * Reduces the hp of the Brick by damage
      * @param damage    The amount of hp to deduct
      * @return 0 if destroyed, -1 if not destroyed

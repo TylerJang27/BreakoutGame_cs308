@@ -60,6 +60,8 @@ public class GameManager {
         myToolBar = new ToolBar(sceneWidth, sceneHeight, lives, score);
         bricks = new ArrayList<Brick>();
         enemies = new ArrayList<Enemy>();
+        lasers = new ArrayList<Laser>();
+        powerups = new ArrayList<Powerup>();
         paddle = new Paddle(centerX, Main.HEIGHT * 9 / 10);
         root = null;
         populateScene(1);
@@ -192,9 +194,8 @@ public class GameManager {
         brickCollision();
         paddleCollision();
         enemyCollision();
-
-        //TODO: IMPELEMENT POWERUP-PADDLE COLLISION
-        //TODO: IMPLEMENT PADDLE-LASER COLLISION
+        laserCollision();
+        powerupCollision();
     }
 
     /**
@@ -235,23 +236,38 @@ public class GameManager {
                 if (cenX + rad > left && cenX - rad < right) {
                     if (cenY + rad > bot && cenY - rad < top) {
                        b.collideFlatHoriz();
-                       if (br.takeDamage(lethality) ==  0) {
-                           score += 10;
-                           getToolBar();
-                       }
-                       break;
+                        destroyBrick(brickCounter, br, cenX, cenY);
+                        break;
                     }
                 } if (cenY >= bot && cenY <= top) {
                     if (cenX + rad > left && cenX - rad < right) {
                         b.collideFlatVert();
-                        if (br.takeDamage(lethality) ==  0) {
-                            score += 10;
-                            getToolBar();
-                        }
+                        destroyBrick(brickCounter, br, cenX, cenY);
                         break;
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Destroys a brick and processes its score
+     * @param brickCounter  the index of the brick
+     * @param br            a pointer to the brick
+     * @param cenX          the x location to spawn powerup
+     * @param cenY          the y location to spawn powerup
+     * @throws FileNotFoundException
+     */
+    private void destroyBrick(int brickCounter, Brick br, double cenX, double cenY) throws FileNotFoundException {
+        if (br.takeDamage(lethality) == 0) {
+            score += 10;
+            if (br.getPowerup() >= 0) {
+                Powerup p = new Powerup(cenX, cenY, br.getPowerup());
+                powerups.add(p);
+                root.getChildren().add(p);
+            }
+            bricks.remove(brickCounter);
+            getToolBar();
         }
     }
 
@@ -276,7 +292,6 @@ public class GameManager {
             }
         }
     }
-
 
     /**
      * Tests for all ball collisions with boss, allowing for scalability
@@ -316,6 +331,24 @@ public class GameManager {
         }
     }
 
+    /**
+     * Tests for collision with powerup, granting effect
+     * @throws FileNotFoundException
+     */
+    private void powerupCollision() throws FileNotFoundException {
+        for (int powerupCounter = powerups.size() - 1; powerupCounter >= 0; powerupCounter --) {
+            Powerup p = powerups.get(powerupCounter);
+            if (p.getCenterX() + p.getRadius() >= paddle.getX() && p.getCenterX() - p.getRadius() <= paddle.getX() + paddle.getWidth()) {
+                if (p.getCenterY() + p.getRadius() >= paddle.getY()) {
+                    powerupHandler(p.recover(), powerupDelay);
+                    powerups.remove(powerupCounter);
+                }
+            } else if (p.getCenterY() - p.getRadius() >= Main.HEIGHT) {
+                powerups.remove(powerupCounter);
+            }
+        }
+    }
+
     public void launch() {
         for (Ball b: balls) {
             if (!b.getLaunched()) {
@@ -332,7 +365,7 @@ public class GameManager {
      * Sets the level counter to level
      * @param level     The level to reset to
      * @throws FileNotFoundException
-     */ //TODO: IMPLEMENT LEVEL =-1 FOR QUIT
+     */ //TODO: IMPLEMENT QUIT
     public void setLevel(int level) throws FileNotFoundException {
         myLevel = level;
         paddle.setX(centerX - paddle.getWidth() / 2);
@@ -369,9 +402,6 @@ public class GameManager {
         balls = new ArrayList<Ball>();
         balls.add(new Ball());
 
-
-        //TODO: FINISH
-
         balls.get(0).setxVelocity(0);
         balls.get(0).setyVelocity(0);
 
@@ -393,7 +423,7 @@ public class GameManager {
         double endTime = 0;
 
         if (alive()) { //TODO: EXTRACT METHODS AND SHORTEN
-            powerupUpdate();
+            powerupUpdate(elapsedTime);
             freezeUpdate();
             for (Enemy e: enemies) {
                 e.step();
@@ -425,7 +455,7 @@ public class GameManager {
                 myLevel += 1;
                 score += 100;
                 getToolBar();
-                populateScene(myLevel);
+                setLevel(myLevel);
             }
             endTime = elapsedGameTime;
 
@@ -456,8 +486,12 @@ public class GameManager {
 
     /**
      * Handles the status of the powerups and updating their values in step
+     * @param elapsedTime   Time since last step
      */
-    private void powerupUpdate() {
+    private void powerupUpdate(double elapsedTime) {
+        for (Powerup p: powerups) {
+            p.step(elapsedTime);
+        }
         if (elapsedGameTime < powerupStart + powerupDelay) {
             paddle.setFreeze(false);
         } else {
