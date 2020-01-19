@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -24,8 +25,10 @@ public class Main extends Application {
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     public static final Paint BACKGROUND = Color.CADETBLUE;
 
+    public static final double POWERUP_TIME = 750;
     public static final int WIDTH = SIZE * 2;       //TODO: REFACTOR ALL SCENE HEIGHT, SCENE WIDTH, WIDTH, HEIGHT
     public static final int HEIGHT = SIZE;
+    public static final Font TITLE_FONT = new Font("Castellar", MenuPage.BOX_WIDTH / 5);
 
     private MenuPage myMenu;
     private GameManager myGameManager;
@@ -63,7 +66,9 @@ public class Main extends Application {
         animation.play();
     }
 
-    //TODO: COMMENTS
+    /**
+     * Signifies that the game environment has been entered, stored in inGame
+     */
     public void startGame() {
         inGame = true;
     }
@@ -108,10 +113,12 @@ public class Main extends Application {
     private void handleKeyInput (KeyCode code, double elapsedTime) throws FileNotFoundException {
         if (code == KeyCode.DIGIT8) {
             //Critical Hit
-
+            myGameManager.critHit();
         } else if (code == KeyCode.P) {
             //All Power Ups
-
+            for (int powerNum = 0; powerNum < GameManager.NUM_POWERUPS; powerNum ++) {
+                myGameManager.powerupHandler(powerNum, POWERUP_TIME * 10);
+            }
         } else if (code == KeyCode.DIGIT1) {
             //Start level 1
             myGameManager.setLevel(1);
@@ -125,13 +132,18 @@ public class Main extends Application {
             myGameManager.setLevel(3);
             myScene = myGameManager.getMyScene();
         } else if (code == KeyCode.L) {
-            //Add extra levels
-
+            //Add extra lives
+            myGameManager.bonusLife();
         } else if (code == KeyCode.R) {
             //Reset to starting position
-
+            if (inGame) {
+                myGameManager.populateScene(myGameManager.getLevel());
+            }
         } else if (code == KeyCode.SPACE) {
-
+            //launches ball
+            if (inGame) {
+                myGameManager.launch();
+            }
         } else if (code == KeyCode.LEFT) {
             //moves paddle left
             myGameManager.getPaddle().moveLeft(elapsedTime);
@@ -140,16 +152,6 @@ public class Main extends Application {
             myGameManager.getPaddle().moveRight(elapsedTime);
         }
     }
-
-    /*private void handleKeyInput (KeyCode code, double elapsedTime) {
-        if (code == KeyCode.LEFT) {
-            //moves paddle left
-            myGameManager.getPaddle().moveLeft(elapsedTime);
-        } else if (code == KeyCode.RIGHT) {
-            //moves paddle right
-            myGameManager.getPaddle().moveRight(elapsedTime);
-        }
-    }*/
 
     /**
      * Start the game.

@@ -15,18 +15,23 @@ import java.util.List;
 public class GameManager {
     public static final double BRICK_WIDTH = Main.WIDTH / 15;
     public static final double BRICK_HEIGHT = Main.HEIGHT / 15;
-    public static final int NUM_POWERUPS = 4;
+    public static final int NUM_POWERUPS = 5;       //-1 signifies no powerup
 
-    private static final double SIZE = Main.SIZE;
+    private static final int DEFAULT_SPEED = 5;
     private static final Paint BACKGROUND = Main.BACKGROUND;
     private static final int DEFAULT_LIVES = 3;
-    private static final int BEGINNING_DELAY = 100; //TODO: NO LONGER CONSTANT, ONCE RELEASED
+    private static final int DELAY_TIME = 500; //TODO: NO LONGER CONSTANT, ONCE RELEASED
     public static final int BOUNCE_FACTOR = 5;
+    private static final String LOSE_TEXT = "WASTED";
+    private static final String WIN_TEXT = "YOU WIN!";
 
     private double elapsedGameTime;
     private double sceneWidth;
     private double sceneHeight;
     private double centerX;
+    private double powerupStart;
+    private double powerupDelay;
+    private boolean win;
     private Scene myScene;
     private ToolBar myToolBar;
     private int lives;
@@ -48,7 +53,6 @@ public class GameManager {
         sceneWidth = width;
         sceneHeight = height;
         centerX = sceneWidth / 2;
-        lethality = 1;
         initializeSettings();
         myToolBar = new ToolBar(sceneWidth, sceneHeight, lives, score);
         bricks = new ArrayList<Brick>();
@@ -62,9 +66,55 @@ public class GameManager {
      * @throws FileNotFoundException
      */
     public void initializeSettings() {
+        lethality = 1;
+        win = false;
+        powerupStart = Double.MIN_VALUE;
+        powerupDelay = 0;
         lives = DEFAULT_LIVES;
         score = 0;
         elapsedGameTime = 0;
+    }
+
+    /**
+     * Adds an additional life, for use in powerups and cheat codes
+     * @throws FileNotFoundException
+     */
+    public void bonusLife() throws FileNotFoundException {
+        lives += 1;
+        getToolBar();
+    }
+
+    /**
+     * Deals 1 damage to all hittable elements
+     * @throws FileNotFoundException
+     */
+    public void critHit() throws FileNotFoundException {
+        for (Brick br: bricks) {
+            br.takeDamage(1);
+        }
+        for (Enemy e: enemies) {
+            e.takeDamage(1);
+        }
+    }
+
+    /**
+     * A handler for all power ups (see cheatcodes)
+     * @param powerup   numbers 0 through 4
+     * @param time      the duration the powerup should last
+     * @throws FileNotFoundException
+     */
+    public void powerupHandler(int powerup, double time) throws FileNotFoundException {
+        if (powerup == 0) {             //shield
+            paddle.setFreeze(false);
+        } else if (powerup == 1) {      //multiball
+            balls.add(new Ball());
+        } else if (powerup == 2) {      //heavy ball
+            lethality = 2;
+        } else if (powerup == 3) {      //bonus life
+            bonusLife();
+        }
+        powerupStart = elapsedGameTime;
+        powerupDelay = time;
     }
 
     /**
@@ -78,9 +128,11 @@ public class GameManager {
     /**
      * Retrieves a List of the nodes comprising the top toolbar
      * @return List of nodes
+     * @throws FileNotFoundException
      */
-    private List<Node> getToolBar() {
+    private List<Node> getToolBar() throws FileNotFoundException {
         myToolBar.setScore(score);
+        myToolBar.resetHearts(lives);
         return myToolBar.getAllNodes();
     }
 
@@ -116,9 +168,12 @@ public class GameManager {
         return elapsedGameTime;
     }
 
-    //TODO: COMMENTS
-    private boolean started() {
-        return elapsedGameTime > BEGINNING_DELAY;
+    /**
+     * Returns the status for whether game play is still alive (not won or lost)
+     * @return whether or not game is viable
+     */
+    private boolean alive() {
+        return lives > 0 && !win;
     }
 
     /**
@@ -175,6 +230,7 @@ public class GameManager {
                        b.collideFlatHoriz();
                        if (br.takeDamage(lethality) ==  0) {
                            score += 10;
+                           getToolBar();
                        }
                        break;
                     }
@@ -183,6 +239,7 @@ public class GameManager {
                         b.collideFlatVert();
                         if (br.takeDamage(lethality) ==  0) {
                             score += 10;
+                            getToolBar();
                         }
                         break;
                     }
@@ -214,6 +271,18 @@ public class GameManager {
         }
     }
 
+    public void launch() {
+        for (Ball b: balls) {
+            if (!b.getLaunched()) {
+                double direction = Math.PI / 2 + (Math.random() - 0.5) / 2;
+                b.setxVelocity(Math.cos(direction) * DEFAULT_SPEED);
+                b.setyVelocity(Math.sin(direction) * DEFAULT_SPEED);
+                b.calcRad();
+                b.launch();
+            }
+        }
+    }
+
     /**
      * Sets the level counter to level
      * @param level     The level to reset to
@@ -233,7 +302,7 @@ public class GameManager {
                 for (int mark = 0; mark < line.length; mark++) {
                     int hp = Integer.parseInt(line[mark]);
                     if (hp > 0) {
-                        bricks.add(new Brick(mark * BRICK_WIDTH, BRICK_HEIGHT * (1.5 + l), hp, bricks.size(), (int) (Math.pow(Math.random(), 10) * NUM_POWERUPS)));
+                        bricks.add(new Brick(mark * BRICK_WIDTH, BRICK_HEIGHT * (1.5 + l), hp, bricks.size(), (int) (Math.pow(Math.random(), 10) * NUM_POWERUPS) - 1));
                     }
                 }
             }
@@ -247,7 +316,7 @@ public class GameManager {
      * @return Scene with all game elements
      * @throws FileNotFoundException
      */
-    private void populateScene(int level) throws FileNotFoundException {
+    public void populateScene(int level) throws FileNotFoundException {
         Group root = new Group();
 
         balls = new ArrayList<Ball>();
@@ -256,8 +325,8 @@ public class GameManager {
 
         //TODO: FINISH
 
-        balls.get(0).setxVelocity(2); //TODO: TEST
-        balls.get(0).setyVelocity(-4);
+        balls.get(0).setxVelocity(0);
+        balls.get(0).setyVelocity(0);
         balls.get(0).calcRad();
 
         root.getChildren().addAll(getToolBar());
@@ -274,12 +343,46 @@ public class GameManager {
      */
     public void step(double elapsedTime) throws FileNotFoundException {
         elapsedGameTime += elapsedTime;
+        double endTime = 0;
 
-        if (started()) {
-            for (Ball b : balls) {
-                b.step(elapsedTime);
+        if (alive()) {
+            if (elapsedGameTime < powerupStart + powerupDelay) {
+                paddle.setFreeze(false);
+            } else {
+                powerupStart = Double.MIN_VALUE;
+                lethality = 1;
+            }
+            for (Ball b: balls) {
+                if (!b.getLaunched()) {
+                    b.setCenterX(paddle.getX() + paddle.getWidth() / 2);
+                    b.setCenterY(paddle.getY() - paddle.getHeight() / 2);
+                } else {
+                    b.step(elapsedTime);
+                }
             }
             collision();
+            if (balls.isEmpty()) {
+                lives -= 1;
+                populateScene(myLevel);
+            }
+            if (bricks.isEmpty()) {
+                myLevel += 1;
+                score += 100;
+                getToolBar();
+                populateScene(myLevel);
+            }
+            endTime = elapsedGameTime;
+        } else {
+            MenuText endText;
+            if (lives <= 0) {   //Lose
+                endText = new MenuText(0, Main.HEIGHT, LOSE_TEXT, Main.TITLE_FONT);
+            } else {            //Win
+                endText = new MenuText(0, Main.HEIGHT, WIN_TEXT, Main.TITLE_FONT);
+            }
+            myScene.getRoot().getChildrenUnmodifiable().add(endText);
+            if (elapsedGameTime > endTime + DELAY_TIME) {
+                //TODO: QUIT
+            }
         }
         //TODO: add other elements and entities
     }

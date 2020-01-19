@@ -19,17 +19,17 @@ import java.io.FileNotFoundException;
  */
 public class MenuPage {
 
-    public static final String INSTRUCTIONS_TXT = "Resources/instructions.txt";
-    //TODO: FIX PUBLICITY
-    private static final String TITLE = Main.TITLE;
     public static final double BOX_SIZE = Main.SIZE / 2;
     public static final double BOX_WIDTH = BOX_SIZE;
     public static final double BOX_HEIGHT = BOX_SIZE / 4;
+
+    private static final String INSTRUCTIONS_TXT = "Resources/instructions.txt";
+    //TODO: FIX PUBLICITY
+    private static final String TITLE = Main.TITLE;
     private static final Paint BACKGROUND = Main.BACKGROUND;
     private static final String START_TEXT = "START";
     private static final String HELP_TEXT = "HELP";
     private static final String LEVEL_TEXT = "LEVELS";
-    private static final Font TITLE_FONT = new Font("Castellar", BOX_WIDTH / 5);
     private static final String BACK_PNG = "Resources/back.png";
 
     private GameManager myGameManager;
@@ -81,7 +81,7 @@ public class MenuPage {
 
         Group root = new Group();
 
-        MenuText titleText = new MenuText(centerX, sceneHeight / 4 + BOX_HEIGHT / 5, TITLE, TITLE_FONT);
+        MenuText titleText = new MenuText(centerX, sceneHeight / 4 + BOX_HEIGHT / 5, TITLE, Main.TITLE_FONT);
 
         MenuBox startBox = new MenuBox(centerX, sceneHeight / 2 - BOX_HEIGHT / 2, START_TEXT);
         MenuBox helpBox = new MenuBox(centerX, sceneHeight / 2 + BOX_HEIGHT, HELP_TEXT);
@@ -142,7 +142,7 @@ public class MenuPage {
     private Scene setupLevel() throws FileNotFoundException {
         Group root = new Group();
 
-        MenuText titleText = new MenuText(centerX, sceneHeight / 6, LEVEL_TEXT, TITLE_FONT);
+        MenuText titleText = new MenuText(centerX, sceneHeight / 6, LEVEL_TEXT, Main.TITLE_FONT);
 
         String level = LEVEL_TEXT.substring(0, LEVEL_TEXT.length() - 1) + " ";
 
@@ -212,7 +212,7 @@ public class MenuPage {
     private Scene setupHelp() throws FileNotFoundException {
         Group root = new Group();
 
-        MenuText titleText = new MenuText(centerX, sceneHeight / 6, HELP_TEXT, TITLE_FONT);
+        MenuText titleText = new MenuText(centerX, sceneHeight / 6, HELP_TEXT, Main.TITLE_FONT);
 
         String instructions = TextReader.readFile(INSTRUCTIONS_TXT);
         MenuText instructionsText = new MenuText(centerX, sceneHeight / 3, instructions, new Font("Calibri", BOX_SIZE / 12));

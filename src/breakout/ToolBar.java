@@ -37,6 +37,7 @@ public class ToolBar {
     private ImageView quitImage;
 
 
+
     /**
      * Constructor to create a ToolBar object
      * @param width     width of the Scene

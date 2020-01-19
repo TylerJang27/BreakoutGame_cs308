@@ -10,4 +10,7 @@ public class Enemy extends Circle {
     private int hp;
     private int id;
 
+    public void takeDamage(int i) {
+        //TODO: Implement
+    }
 }

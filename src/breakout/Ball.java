@@ -12,12 +12,15 @@ public class Ball extends Entity {
 
     private static String BALL_PNG = "Resources/ball.png";
 
+    private boolean launched;
+
     /**
      * Constructor for Ball, a child of Entity
      * @param image Image to fill the Ball
      */
     public Ball(Image image) {
         super(image);
+        launched = false;
     }
 
     /**
@@ -40,6 +43,21 @@ public class Ball extends Entity {
      */
     public void collideFlatHoriz() {
         this.setyVelocity(-1 * this.getyVelocity());
+    }
+
+    /**
+     * Sets the value of launched to true
+     */
+    public void launch() {
+        launched = true;
+    }
+
+    /**
+     * Accesses the value of launched
+     * @return launched
+     */
+    public boolean getLaunched() {
+        return launched;
     }
 
 }
