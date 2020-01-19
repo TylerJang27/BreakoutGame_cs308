@@ -29,6 +29,7 @@ public class GameManager {
     private double sceneHeight;
     private double centerX;
     private double powerupStart;
+    private double freezeStart;
     private double powerupDelay;
     private boolean win;
     private Scene myScene;
@@ -72,6 +73,7 @@ public class GameManager {
         lethality = 1;
         win = false;
         powerupStart = Double.MIN_VALUE;
+        freezeStart = Double.MIN_VALUE;
         powerupDelay = 0;
         lives = DEFAULT_LIVES;
         score = 0;
@@ -254,6 +256,29 @@ public class GameManager {
     }
 
     /**
+     * Tests for all ball collisions with paddles
+     */
+    private void paddleCollision() {
+        for (Ball b: balls) {
+            if (b.getCenterX() >= paddle.getX() && b.getCenterX() <= paddle.getX() + paddle.getWidth()) {
+                if (b.getCenterY() + b.getRadius() >= paddle.getY()) {
+                    b.collideFlatHoriz();
+                    double dx = b.getCenterX() - (paddle.getX() + paddle.getWidth() / 2);
+                    double dy = b.getCenterY() - paddle.getY();
+                    dx /= 4;
+                    double xVel = b.getxVelocity() + dx / BOUNCE_FACTOR;
+                    double yVel = -1 * Math.abs(b.getyVelocity() - dy / BOUNCE_FACTOR);
+                    xVel *= DEFAULT_SPEED / Math.sqrt(xVel * xVel + yVel * yVel);
+                    yVel *= DEFAULT_SPEED / Math.sqrt(xVel * xVel + yVel * yVel);
+                    b.setxVelocity(xVel);
+                    b.setyVelocity(yVel);
+                }
+            }
+        }
+    }
+
+
+    /**
      * Tests for all ball collisions with boss, allowing for scalability
      * @throws FileNotFoundException
      */
@@ -274,23 +299,19 @@ public class GameManager {
     }
 
     /**
-     * Tests for all ball collisions with paddles
+     * Test for collision between paddle and laser
      */
-    private void paddleCollision() {
-        for (Ball b: balls) {
-            if (b.getCenterX() >= paddle.getX() && b.getCenterX() <= paddle.getX() + paddle.getWidth()) {
-                if (b.getCenterY() + b.getRadius() >= paddle.getY()) {
-                    b.collideFlatHoriz();
-                    double dx = b.getCenterX() - (paddle.getX() + paddle.getWidth() / 2);
-                    double dy = b.getCenterY() - paddle.getY();
-                    dx /= 4;
-                    double xVel = b.getxVelocity() + dx / BOUNCE_FACTOR;
-                    double yVel = -1 * Math.abs(b.getyVelocity() - dy / BOUNCE_FACTOR);
-                    xVel *= DEFAULT_SPEED / Math.sqrt(xVel * xVel + yVel * yVel);
-                    yVel *= DEFAULT_SPEED / Math.sqrt(xVel * xVel + yVel * yVel);
-                    b.setxVelocity(xVel);
-                    b.setyVelocity(yVel);
+    private void laserCollision() {
+        for (int laserCounter = lasers.size() - 1; laserCounter >= 0; laserCounter --) {
+            Laser l = lasers.get(laserCounter);
+            if (paddle.getX() <= l.getX() && paddle.getX() + paddle.getWidth() >= l.getX() + l.getWidth()) {
+                if (paddle.getY() <= l.getY() + l.getHeight() && paddle.getY() + paddle.getHeight() >= l.getY()) {
+                    paddle.setFreeze(true);
+                    freezeStart = Math.max(freezeStart, elapsedGameTime);
                 }
+            }
+            if (l.getY() > Main.HEIGHT) {
+                lasers.remove(laserCounter);
             }
         }
     }
@@ -373,6 +394,7 @@ public class GameManager {
 
         if (alive()) { //TODO: EXTRACT METHODS AND SHORTEN
             powerupUpdate();
+            freezeUpdate();
             for (Enemy e: enemies) {
                 e.step();
                 if (Math.round(elapsedGameTime) % 80 == 0) {
@@ -381,6 +403,10 @@ public class GameManager {
                     root.getChildren().add(l);
                 }
             }
+            for (Laser l: lasers) {
+                l.step(elapsedTime);
+            }
+
             for (Ball b: balls) {
                 if (!b.getLaunched()) {
                     b.setCenterX(paddle.getX() + paddle.getWidth() / 2);
@@ -390,6 +416,7 @@ public class GameManager {
                 }
             }
             collision();
+
             if (balls.isEmpty()) {
                 lives -= 1;
                 populateScene(myLevel);
@@ -401,6 +428,7 @@ public class GameManager {
                 populateScene(myLevel);
             }
             endTime = elapsedGameTime;
+
         } else {
             MenuText endText;
             if (lives <= 0) {   //Lose
@@ -414,6 +442,16 @@ public class GameManager {
             }
         }
         //TODO: add other elements and entities
+    }
+
+    /**
+     * Handles the status of the paddle being frozen
+     */
+    private void freezeUpdate() {
+        if (elapsedGameTime > freezeStart + DELAY_TIME / 2) {
+            freezeStart = Double.MIN_VALUE;
+            paddle.setFreeze(false);
+        }
     }
 
     /**
