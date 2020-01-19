@@ -36,48 +36,105 @@ public class MenuPage {
     private double sceneWidth;
     private double sceneHeight;
     private double centerX;
+    private Scene myScene;
 
     /**
-     *   Constructor to create a MenuPage object
-     *      @param width    int width for the entire scene
-     *      @param height   int height for the entire scene
+     * Constructor to create a MenuPage object
+     * @param width    int width for the entire scene
+     * @param height   int height for the entire scene
      */
     public MenuPage (double width, double height) {
         sceneWidth = width;
         sceneHeight = height;
         centerX = sceneWidth / 2;
+        myScene = setupMenu();
     }
 
-    public Scene setupMenu() {
+    /**
+     * Accessor for the current Scene
+     * @return myScene, the current Scene
+     */
+    public Scene getMyScene() {
+        return myScene;
+    }
+
+    /**
+     * Creates the Main Menu page, with title and three buttons
+     * Has buttons to go to Level 1, Help screen, and any Level
+     * @return Scene of the Main Menu page
+     */
+    private Scene setupMenu() {
 
         Group root = new Group();
 
         MenuText titleText = new MenuText(centerX, sceneHeight / 4 + BOX_HEIGHT / 5, TITLE, TITLE_FONT);
 
         MenuBox startBox = new MenuBox(centerX, sceneHeight / 2 - BOX_HEIGHT / 2, START_TEXT);
-        //MenuText startText = new MenuText(centerX, sceneHeight / 2 + BOX_HEIGHT / 10, START_TEXT, MENU_FONT);
-
         MenuBox helpBox = new MenuBox(centerX, sceneHeight / 2 + BOX_HEIGHT, HELP_TEXT);
-        //MenuText helpText = new MenuText(centerX, sceneHeight / 2 + BOX_HEIGHT * 16 / 10, HELP_TEXT, MENU_FONT);
-
         MenuBox levelBox = new MenuBox(centerX, sceneHeight / 2 + BOX_HEIGHT * 5 / 2, LEVEL_TEXT);
-        //MenuText levelText = new MenuText(centerX, sceneHeight / 2 + BOX_HEIGHT * 31 / 10, LEVEL_TEXT, MENU_FONT);
 
         EventHandler <MouseEvent> startHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent e) {
-                if (!root.getChildren().contains(helpBox)) {
+                /*if (!root.getChildren().contains(helpBox)) {
                     root.getChildren().addAll(helpBox.getAllNodes());
-                }
+                }*/
+
+            }
+        };
+
+        EventHandler <MouseEvent> helpHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent e) {
+                myScene = setupHelp();
+                System.out.println(HELP_TEXT);
+            }
+        };
+
+        EventHandler <MouseEvent> levelHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent e) {
+                myScene = setupLevel();
+                System.out.println(LEVEL_TEXT);
             }
         };
 
         startBox.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, startHandler);
+        helpBox.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, helpHandler);
+        levelBox.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, levelHandler);
 
         root.getChildren().add(titleText);
         root.getChildren().addAll(startBox.getAllNodes());
-
+        root.getChildren().addAll(helpBox.getAllNodes());
         root.getChildren().addAll(levelBox.getAllNodes());
+
+        return new Scene(root, sceneWidth, sceneHeight, BACKGROUND);
+    }
+
+    /**
+     * Creates the Levels page, with Levels and back button
+     * @return Scene of the Levels page
+     */
+    private Scene setupLevel() {
+        Group root = new Group();
+
+        MenuText titleText = new MenuText(centerX, sceneHeight / 4 + BOX_HEIGHT / 5, HELP_TEXT, TITLE_FONT);
+
+        System.out.println(LEVEL_TEXT);
+
+        root.getChildren().add(titleText);
+
+        return new Scene(root, sceneWidth, sceneHeight, BACKGROUND);
+    }
+
+    /**
+     * Creates the Help page, with description and back button
+     * @return Scene of the Help page
+     */
+    private Scene setupHelp() {
+        Group root = new Group();
+
+        System.out.println(HELP_TEXT);
 
         return new Scene(root, sceneWidth, sceneHeight, BACKGROUND);
     }

@@ -17,9 +17,9 @@ public class MenuBox extends Rectangle {
     private static final double BOX_HEIGHT = MenuPage.BOX_HEIGHT;
     public static final Font MENU_FONT = new Font("Castellar", BOX_WIDTH / 10);
 
-
     private MenuText myText;
     private Glow glow;
+
     /**
      * Constructor to create a MenuBox object
      * Used for instances like startBox, helpBox, etc.
