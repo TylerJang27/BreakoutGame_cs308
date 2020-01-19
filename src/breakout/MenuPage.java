@@ -20,6 +20,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Scene;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 public class MenuPage {
 
     //TODO: FIX PUBLICITY
@@ -37,6 +40,7 @@ public class MenuPage {
     private double sceneHeight;
     private double centerX;
     private Scene myScene;
+    private EventHandler<MouseEvent> backHandler;
 
     /**
      * Constructor to create a MenuPage object
@@ -48,6 +52,11 @@ public class MenuPage {
         sceneHeight = height;
         centerX = sceneWidth / 2;
         myScene = setupMenu();
+        backHandler = new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent e) {
+                myScene = setupMenu();
+            }
+        };
     }
 
     /**
@@ -93,7 +102,11 @@ public class MenuPage {
         EventHandler <MouseEvent> levelHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent e) {
-                myScene = setupLevel();
+                try {
+                    myScene = setupLevel();
+                } catch (FileNotFoundException ex) {
+                    ex.printStackTrace();
+                }
             }
         };
 
@@ -101,6 +114,7 @@ public class MenuPage {
         helpBox.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, helpHandler);
         levelBox.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, levelHandler);
 
+        //TODO: DRY
         root.getChildren().add(titleText);
         root.getChildren().addAll(startBox.getAllNodes());
         root.getChildren().addAll(helpBox.getAllNodes());
@@ -113,13 +127,27 @@ public class MenuPage {
      * Creates the Levels page, with Levels and back button
      * @return Scene of the Levels page
      */
-    private Scene setupLevel() {
+    private Scene setupLevel() throws FileNotFoundException {
         Group root = new Group();
 
-        MenuText titleText = new MenuText(centerX, sceneHeight / 4 + BOX_HEIGHT / 5, HELP_TEXT, TITLE_FONT);
+        MenuText titleText = new MenuText(centerX, sceneHeight / 8, LEVEL_TEXT, TITLE_FONT);
 
+        String level = LEVEL_TEXT.substring(0, LEVEL_TEXT.length() - 1) + " ";
 
+        //TODO: LOOPIFY, DRY
+        MenuBox level1Box = new MenuBox(centerX, sceneHeight / 4, level + "1");
+        MenuBox level2Box = new MenuBox(centerX, sceneHeight / 2, level + "2");
+        MenuBox level3Box = new MenuBox(centerX, sceneHeight * 3 / 4, level + "3");
+
+        MenuBox backButton = new MenuBox(sceneWidth / 10, sceneHeight / 10, BOX_HEIGHT, BOX_HEIGHT, Color.DARKGREY, "", new Image(new FileInputStream("Resources/back.png")));
+        backButton.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, backHandler);
+
+        //TODO: DRY
         root.getChildren().add(titleText);
+        root.getChildren().addAll(level1Box.getAllNodes());
+        root.getChildren().addAll(level2Box.getAllNodes());
+        root.getChildren().addAll(level3Box.getAllNodes());
+        root.getChildren().addAll(backButton.getAllNodes());
 
         return new Scene(root, sceneWidth, sceneHeight, BACKGROUND);
     }
@@ -131,7 +159,16 @@ public class MenuPage {
     private Scene setupHelp() {
         Group root = new Group();
 
+        MenuText titleText = new MenuText(centerX, sceneHeight / 8, HELP_TEXT, TITLE_FONT);
 
+        
+        //TODO: ADD ICONS
+
+        MenuBox backButton = new MenuBox(sceneWidth / 10, sceneHeight / 10, BOX_HEIGHT, BOX_HEIGHT, Color.DARKGREY, "", new Image(new FileInputStream("Resources/back.png")));
+        backButton.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, backHandler);
+
+        root.getChildren().add(titleText);
+        root.getChildren().addAll(backButton.getAllNodes());
         return new Scene(root, sceneWidth, sceneHeight, BACKGROUND);
     }
 

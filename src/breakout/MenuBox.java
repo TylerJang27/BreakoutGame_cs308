@@ -3,6 +3,8 @@ import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.effect.Glow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -17,6 +19,7 @@ public class MenuBox extends Rectangle {
     private static final double BOX_HEIGHT = MenuPage.BOX_HEIGHT;
     public static final Font MENU_FONT = new Font("Castellar", BOX_WIDTH / 10);
 
+    private ImageView myImage;
     private MenuText myText;
     private Glow glow;
 
@@ -29,12 +32,14 @@ public class MenuBox extends Rectangle {
      * @param height    height of rectangle
      * @param color     color of rectangle
      * @param text      text of button
+     * @param image     image to display on box
      */
-    public MenuBox(double x, double y, double width, double height, Color color, String text) {
+    public MenuBox(double x, double y, double width, double height, Color color, String text, Image image) {
         super(x - width / 2, y, width, height);
         this.setFill(color);
         this.setArcWidth(width / 5);
         this.setArcHeight(height / 2);
+        this.setImage(image);
 
         myText = new MenuText(x, y + height * 2 / 3, text, MENU_FONT);
 
@@ -63,10 +68,37 @@ public class MenuBox extends Rectangle {
      * Used for instances like startBox, helpBox, etc.
      * @param x         x coordinate of bottom left corner
      * @param y         y coordinate of bottom left corner
+     * @param width     width of rectangle
+     * @param height    height of rectangle
+     * @param color     color of rectangle
+     * @param text      text of button
+     */
+    public MenuBox(double x, double y, double width, double height, Color color, String text) {
+        this(x, y, width, height, color, text, null);
+    }
+
+    /**
+     * Constructor to create a MenuBox object
+     * Used for instances like startBox, helpBox, etc.
+     * @param x         x coordinate of bottom left corner
+     * @param y         y coordinate of bottom left corner
      * @param text      text of button
      */
     public MenuBox(double x, double y, String text) {
         this(x, y, BOX_WIDTH, BOX_HEIGHT, Color.DARKGREY, text);
+    }
+
+    /**
+     * Sets the image to display on top of the box
+     * @param image to display
+     */
+    public void setImage(Image image) {
+        myImage = new ImageView(image);
+        myImage.setX(this.getX());
+        myImage.setY(this.getY());
+        myImage.setFitWidth(this.getWidth());
+        myImage.setFitHeight(this.getHeight());
+        myImage.setPreserveRatio(true);
     }
 
     /**
@@ -77,6 +109,9 @@ public class MenuBox extends Rectangle {
         List <Node> nodeList = new ArrayList<Node>();
         nodeList.add(this);
         nodeList.add(myText);
+        if (myImage != null) {
+            nodeList.add(myImage);
+        }
         return nodeList;
     }
 
@@ -88,7 +123,9 @@ public class MenuBox extends Rectangle {
      */
     public void addMouseEventHandler(EventType<MouseEvent> eventType, EventHandler<MouseEvent> eventHandler) {
         for (Node myNode: this.getAllNodes()) {
-            myNode.addEventHandler(eventType, eventHandler);
+            if (myNode != null) {
+                myNode.addEventHandler(eventType, eventHandler);
+            }
         }
     }
 }
