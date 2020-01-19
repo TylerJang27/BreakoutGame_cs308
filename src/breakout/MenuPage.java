@@ -87,7 +87,6 @@ public class MenuPage {
             @Override
             public void handle (MouseEvent e) {
                 myScene = setupHelp();
-                System.out.println(HELP_TEXT);
             }
         };
 
@@ -95,7 +94,6 @@ public class MenuPage {
             @Override
             public void handle (MouseEvent e) {
                 myScene = setupLevel();
-                System.out.println(LEVEL_TEXT);
             }
         };
 
@@ -120,7 +118,6 @@ public class MenuPage {
 
         MenuText titleText = new MenuText(centerX, sceneHeight / 4 + BOX_HEIGHT / 5, HELP_TEXT, TITLE_FONT);
 
-        System.out.println(LEVEL_TEXT);
 
         root.getChildren().add(titleText);
 
@@ -134,7 +131,6 @@ public class MenuPage {
     private Scene setupHelp() {
         Group root = new Group();
 
-        System.out.println(HELP_TEXT);
 
         return new Scene(root, sceneWidth, sceneHeight, BACKGROUND);
     }
