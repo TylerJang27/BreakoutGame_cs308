@@ -25,17 +25,17 @@ public class GameManager {
     private static final String WIN_TEXT = "YOU WIN!";
 
     private double elapsedGameTime;
-    private double sceneWidth;
-    private double sceneHeight;
-    private double centerX;
+    private double sceneWidth; //TODO: REMOVE
+    private double sceneHeight; //TODO: REMOVE
+    private double centerX; //TODO: REMOVE
     private double powerupStart;
     private double freezeStart;
-    private double powerupDelay;
+    private double powerupDelay; //TODO: CONDENSE
     private Scene myScene;
     private ToolBar myToolBar;
-    private int lives;
-    private long score;
-    private int lethality;
+    private int lives; //TODO: MIGRATE TO TOOLBAR
+    private long score; //TODO: MIGRATE TO TOOLBAR
+    private int lethality; //TODO: MIGRATE TO BALL
     private int myLevel;
     private Paddle paddle;
     private List<Ball> balls;
@@ -222,22 +222,20 @@ public class GameManager {
         for (Ball b: balls) {
             for (int brickCounter = bricks.size() - 1; brickCounter >= 0; brickCounter --) {
                 Brick br = bricks.get(brickCounter);
-                double cenX = b.getCenterX();
+                double cenX = b.getCenterX();           //ball coordinates
                 double cenY = b.getCenterY();
-                double xVel = b.getxVelocity();
-                double yVel = b.getyVelocity();
                 double rad = b.getRadius();
-                double left = br.getX();
+                double left = br.getX();                //brick coordinates
                 double right = left + br.getWidth();
                 double bot = br.getY();
                 double top = bot + br.getHeight();
-                if (cenX + rad > left && cenX - rad < right) {
+                if (cenX> left && cenX < right) {
                     if (cenY + rad > bot && cenY - rad < top) {
                        b.collideFlatHoriz();
                         destroyBrick(brickCounter, br, cenX, cenY);
                         break;
                     }
-                } if (cenY >= bot && cenY <= top) {
+                } else if (cenY >= bot && cenY <= top) {
                     if (cenX + rad > left && cenX - rad < right) {
                         b.collideFlatVert();
                         destroyBrick(brickCounter, br, cenX, cenY);
@@ -274,12 +272,12 @@ public class GameManager {
      */
     private void paddleCollision() {
         for (Ball b: balls) {
-            if (b.getCenterX() >= paddle.getX() && b.getCenterX() <= paddle.getX() + paddle.getWidth()) {
+            if (b.getCenterX() + b.getRadius() >= paddle.getX() && b.getCenterX() -b.getRadius() <= paddle.getX() + paddle.getWidth()) {
                 if (b.getCenterY() + b.getRadius() >= paddle.getY()) {
                     b.collideFlatHoriz();
                     double dx = b.getCenterX() - (paddle.getX() + paddle.getWidth() / 2);
-                    double dy = b.getCenterY() - paddle.getY();
-                    dx /= 4;
+                    double dy = b.getCenterY() - (paddle.getY() + paddle.getHeight());
+                    dx /= 2;
                     double xVel = b.getxVelocity() + dx / BOUNCE_FACTOR;
                     double yVel = -1 * Math.abs(b.getyVelocity() - dy / BOUNCE_FACTOR);
                     xVel *= DEFAULT_SPEED / Math.sqrt(xVel * xVel + yVel * yVel);
@@ -458,7 +456,6 @@ public class GameManager {
                 score += 100;
                 getToolBar();
                 setLevel(myLevel);
-                System.out.println(myLevel);
             }
             endTime = elapsedGameTime;
 

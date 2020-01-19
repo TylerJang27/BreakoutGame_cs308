@@ -43,13 +43,11 @@ public class Enemy extends Entity {
     }
 
     public void step() {
-        System.out.println(skinCounter);
         this.setFill(new ImagePattern(skins.get(skinCounter)));
         if (skinCounter >= 3) {
             skinCounter = 0;
         } else {
             skinCounter += 1;
         }
-        System.out.println(skinCounter);
     }
 }
