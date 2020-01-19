@@ -91,11 +91,11 @@ public class MenuPage {
             @Override
             public void handle (MouseEvent e) {
                 try {
-                    myGameManager.initializeSettings(1);
+                    myGameManager.setLevel(1);
+                    myScene = myGameManager.getMyScene();
                 } catch (FileNotFoundException ex) {
                     ex.printStackTrace();
                 }
-                myScene = myGameManager.getMyScene();
             }
         };
 
@@ -152,33 +152,33 @@ public class MenuPage {
             @Override
             public void handle (MouseEvent e) {
                 try {
-                    myGameManager.initializeSettings(1);
+                    myGameManager.setLevel(1);
+                    myScene = myGameManager.getMyScene();
                 } catch (FileNotFoundException ex) {
                     ex.printStackTrace();
                 }
-                myScene = myGameManager.getMyScene();
             }
         };
         EventHandler <MouseEvent> level2Handler = new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent e) {
                 try {
-                    myGameManager.initializeSettings(2);
+                    myGameManager.setLevel(2);
+                    myScene = myGameManager.getMyScene();
                 } catch (FileNotFoundException ex) {
                     ex.printStackTrace();
                 }
-                myScene = myGameManager.getMyScene();
             }
         };
         EventHandler <MouseEvent> level3Handler = new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent e) {
                 try {
-                    myGameManager.initializeSettings(3);
+                    myGameManager.setLevel(3);
+                    myScene = myGameManager.getMyScene();
                 } catch (FileNotFoundException ex) {
                     ex.printStackTrace();
                 }
-                myScene = myGameManager.getMyScene();
             }
         };
 

@@ -32,6 +32,7 @@ public class Brick extends Rectangle {
      */
     public Brick(double x, double y, int hp, int id, int powerup) throws FileNotFoundException {
         super(x, y, BRICK_WIDTH, BRICK_HEIGHT);
+        this.hp = hp;
         this.id = id;
         this.powerup = powerup;
         this.setFill(Color.GREY);
@@ -51,5 +52,21 @@ public class Brick extends Rectangle {
             this.setFill(new ImagePattern(new Image(new FileInputStream(HP_3))));
 
         }
+    }
+
+    /**
+     * Reduces the hp of the Brick by damage
+     * @param damage    The amount of hp to deduct
+     * @return 0 if destroyed, -1 if not destroyed
+     * @throws FileNotFoundException
+     */
+    public int takeDamage(int damage) throws FileNotFoundException {
+        hp -= damage;
+        updateSkin();
+        if (hp <= 0) {
+            this.setY(Main.HEIGHT * 2);
+            return 0;
+        }
+        return -1;
     }
 }

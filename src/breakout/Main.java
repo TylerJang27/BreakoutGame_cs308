@@ -50,7 +50,13 @@ public class Main extends Application {
         stage.setTitle(TITLE);
         stage.show();
         //begins game loop to call step
-        KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY, stage)); //TODO: IMPLEMENT AN ANIMATION
+        KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> {
+            try {
+                step(MILLISECOND_DELAY / 10, stage);
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        }); //TODO: IMPLEMENT AN ANIMATION
         Timeline animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
@@ -59,7 +65,6 @@ public class Main extends Application {
 
     //TODO: COMMENTS
     public void startGame() {
-        myScene = myGameManager.getMyScene();
         inGame = true;
     }
 
@@ -69,8 +74,9 @@ public class Main extends Application {
      * Updates the scene upon clicks
      * @param elapsedTime   Amount of time since last step
      * @param stage         Stage on which to show game
+     * @throws FileNotFoundException
      */
-    private void step (double elapsedTime, Stage stage) {
+    private void step (double elapsedTime, Stage stage) throws FileNotFoundException {
         if (!inGame) {
             myScene = myMenu.getMyScene();
             if (myScene.equals(myGameManager.getMyScene())) {
@@ -97,15 +103,15 @@ public class Main extends Application {
 
         } else if (code == KeyCode.DIGIT1) {
             //Start level 1
-            myGameManager.initializeSettings(1);
+            myGameManager.setLevel(1);
             myScene = myGameManager.getMyScene();
         } else if (code == KeyCode.DIGIT2) {
             //Start level 2
-            myGameManager.initializeSettings(2);
+            myGameManager.setLevel(2);
             myScene = myGameManager.getMyScene();
         } else if (code == KeyCode.DIGIT3) {
             //Start level 3
-            myGameManager.initializeSettings(3);
+            myGameManager.setLevel(3);
             myScene = myGameManager.getMyScene();
         } else if (code == KeyCode.L) {
             //Add extra levels

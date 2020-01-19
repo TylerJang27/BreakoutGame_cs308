@@ -1,11 +1,9 @@
 package breakout;
 
 import javafx.scene.image.Image;
-import javafx.scene.shape.Shape;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.List;
 
 /**
  * A class to handle the player's ball(s)
@@ -34,14 +32,14 @@ public class Ball extends Entity {
      * Registers a collision with a flat vertical surface
      */
     public void collideFlatVert() {
-        this.setxVelocity(-1 * this.getX());
+        this.setxVelocity(-1 * this.getxVelocity());
     }
 
     /**
      * Registers a collision with a flat horizontal surface
      */
     public void collideFlatHoriz() {
-        this.setyVelocity(-1 * this.getY());
+        this.setyVelocity(-1 * this.getyVelocity());
     }
 
 }

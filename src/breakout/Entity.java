@@ -25,7 +25,7 @@ public abstract class Entity extends Circle {
      * @param image     Image to fill the Entity
      */
     public Entity (Image image) {
-        super(Main.SIZE, Main.SIZE / 2, RADIUS);
+        super(Main.SIZE, Main.SIZE * 3 / 4, RADIUS);
         this.setFill(new ImagePattern(image));
     }
 
@@ -35,7 +35,7 @@ public abstract class Entity extends Circle {
      */
     public void step(double elapsedTime) {
         this.setCenterX(this.getCenterX() + xVelocity * elapsedTime);
-        this.setCenterY(this.getCenterY() - yVelocity * elapsedTime);
+        this.setCenterY(this.getCenterY() + yVelocity * elapsedTime);
         this.setRotate(this.getRotate() + speed / 40);
     }
 
@@ -79,7 +79,7 @@ public abstract class Entity extends Circle {
      * Accessor for the y velocity
      * @return xVelocity    the velocity of travel in the horizontal direction
      */
-    public double getX() {
+    public double getxVelocity() {
         return xVelocity;
     }
 
@@ -87,7 +87,7 @@ public abstract class Entity extends Circle {
      * Accessor for the y velocity
      * @return yVelocity    the velocity of travel in the vertical direction
      */
-    public double getY() {
+    public double getyVelocity() {
         return yVelocity;
     }
 
@@ -95,7 +95,7 @@ public abstract class Entity extends Circle {
      * Calculates the speed and direction based on X and Y velocity
      */
     public void calcRad() {
-        speed = Math.sqrt(xVelocity * xVelocity + yVelocity + yVelocity);
+        speed = Math.sqrt(xVelocity * xVelocity + yVelocity * yVelocity);
         if (xVelocity == 0) {
             direction = Math.PI / 2 * yVelocity / Math.abs(yVelocity);
         } else if (xVelocity < 0) {
