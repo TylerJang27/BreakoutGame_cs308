@@ -1,20 +1,17 @@
 package breakout;
-import breakout.MenuPage;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.io.FileNotFoundException;
+
 /**
  * Feel free to completely change this code or delete it entirely. 
  */
@@ -22,23 +19,30 @@ public class Main extends Application {
 
     public static final String TITLE = "Brick Bonanza";
     public static final int SIZE = 600;
-    public static final int WIDTH = SIZE * 2;
-    public static final int HEIGHT = SIZE;
     public static final int FRAMES_PER_SECOND = 60;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     public static final Paint BACKGROUND = Color.CADETBLUE;
 
+    private static final int WIDTH = SIZE * 2;
+    private static final int HEIGHT = SIZE;
+
     private MenuPage myMenu;
+    private GameManager myGameManager;
     private Scene myScene;
+    private boolean inGame;
 
 
     /**
      * Initialize the scene to start
+     * @param stage     Stage on which to show game
      */
     @Override
-    public void start (Stage stage) {
+    public void start (Stage stage) throws FileNotFoundException {
+        inGame = false;
         myMenu = new MenuPage(WIDTH, HEIGHT);
+        myGameManager = new GameManager(WIDTH, HEIGHT);
+        myMenu.setMyGameManager(myGameManager);
 
         myScene = myMenu.getMyScene();
         stage.setScene(myScene);
@@ -56,12 +60,21 @@ public class Main extends Application {
 
     //private void handleMouseInput(double x, double y) { }
 
+    /**
+     * Updates the scene upon clicks
+     * @param elapsedTime   Amount of time since last step
+     * @param stage         Stage on which to show game
+     */
     private void step (double elapsedTime, Stage stage) {
         myScene = myMenu.getMyScene();
         stage.setScene(myScene);
     }
 
-    private void handleKeyInpus (KeyCode code) {
+    /**
+     * Handles input for all the cheat codes
+     * @param code Keyboard input
+     */
+    private void handleKeyInput (KeyCode code) {
         if (code == KeyCode.DIGIT8) {
             //Critical Hit
 

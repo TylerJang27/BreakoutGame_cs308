@@ -1,42 +1,38 @@
 package breakout;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.application.Application;
+
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.Stage;
-import javafx.util.Duration;
-import javafx.scene.Scene;
+
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+/**
+ * A class to handle all of the scenes associated with the starting Menu Page
+ */
 public class MenuPage {
 
+    public static final String INSTRUCTIONS_TXT = "Resources/instructions.txt";
     //TODO: FIX PUBLICITY
-    public static final String TITLE = "Brick Bonanza"; //TODO: DRY
-    public static final double BOX_SIZE = 300;
+    private static final String TITLE = Main.TITLE;
+    public static final double BOX_SIZE = Main.SIZE / 2;
     public static final double BOX_WIDTH = BOX_SIZE;
     public static final double BOX_HEIGHT = BOX_SIZE / 4;
-    public static final Paint BACKGROUND = Color.CADETBLUE; //TODO: DRY
-    public static final String START_TEXT = "START";
-    public static final String HELP_TEXT = "HELP";
-    public static final String LEVEL_TEXT = "LEVELS";
-    public static final Font TITLE_FONT = new Font("Castellar", BOX_WIDTH / 5);
+    private static final Paint BACKGROUND = Main.BACKGROUND;
+    private static final String START_TEXT = "START";
+    private static final String HELP_TEXT = "HELP";
+    private static final String LEVEL_TEXT = "LEVELS";
+    private static final Font TITLE_FONT = new Font("Castellar", BOX_WIDTH / 5);
+    public static final String BACK_PNG = "Resources/back.png";
 
+    private GameManager myGameManager;
     private double sceneWidth;
     private double sceneHeight;
     private double centerX;
@@ -58,6 +54,14 @@ public class MenuPage {
                 myScene = setupMenu();
             }
         };
+    }
+
+    /**
+     * Sets the value of myGameManager so that levels can be started
+     * @param gameManager       The GameManager to be referenced hereafter
+     */
+    public void setMyGameManager(GameManager gameManager) {
+        myGameManager = gameManager;
     }
 
     /**
@@ -86,10 +90,8 @@ public class MenuPage {
         EventHandler <MouseEvent> startHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent e) {
-                /*if (!root.getChildren().contains(helpBox)) {
-                    root.getChildren().addAll(helpBox.getAllNodes());
-                }*/
-
+                myGameManager.initializeSettings(1);
+                myScene = myGameManager.getMyScene();
             }
         };
 
@@ -140,11 +142,39 @@ public class MenuPage {
         String level = LEVEL_TEXT.substring(0, LEVEL_TEXT.length() - 1) + " ";
 
         //TODO: LOOPIFY, DRY
+
+        EventHandler <MouseEvent> level1Handler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent e) {
+                myGameManager.initializeSettings(1);
+                myScene = myGameManager.getMyScene();
+            }
+        };
+        EventHandler <MouseEvent> level2Handler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent e) {
+                myGameManager.initializeSettings(2);
+                myScene = myGameManager.getMyScene();
+            }
+        };
+        EventHandler <MouseEvent> level3Handler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent e) {
+                myGameManager.initializeSettings(3);
+                myScene = myGameManager.getMyScene();
+            }
+        };
+
         MenuBox level1Box = new MenuBox(centerX, sceneHeight / 4, level + "1");
         MenuBox level2Box = new MenuBox(centerX, sceneHeight / 2, level + "2");
         MenuBox level3Box = new MenuBox(centerX, sceneHeight * 3 / 4, level + "3");
 
-        MenuBox backButton = new MenuBox(sceneWidth / 10, sceneHeight / 10, BOX_HEIGHT, BOX_HEIGHT, Color.DARKGREY, "", new Image(new FileInputStream("Resources/back.png")));
+        level1Box.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, level1Handler);
+        level2Box.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, level2Handler);
+        level3Box.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, level3Handler);
+
+
+        MenuBox backButton = new MenuBox(sceneWidth / 10, sceneHeight / 10, BOX_HEIGHT, BOX_HEIGHT, Color.DARKGREY, "", new Image(new FileInputStream(BACK_PNG)));
         backButton.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, backHandler);
 
         //TODO: DRY
@@ -166,13 +196,13 @@ public class MenuPage {
 
         MenuText titleText = new MenuText(centerX, sceneHeight / 6, HELP_TEXT, TITLE_FONT);
 
-        String instructions = TextReader.readFile("Resources/instructions.txt");
+        String instructions = TextReader.readFile(INSTRUCTIONS_TXT);
         MenuText instructionsText = new MenuText(centerX, sceneHeight / 3, instructions, new Font("Calibri", BOX_SIZE / 12));
         instructionsText.setTextAlignment(TextAlignment.CENTER);
 
         //TODO: ADD ICONS
 
-        MenuBox backButton = new MenuBox(sceneWidth / 10, sceneHeight / 10, BOX_HEIGHT, BOX_HEIGHT, Color.DARKGREY, "", new Image(new FileInputStream("Resources/back.png")));
+        MenuBox backButton = new MenuBox(sceneWidth / 10, sceneHeight / 10, BOX_HEIGHT, BOX_HEIGHT, Color.DARKGREY, "", new Image(new FileInputStream(BACK_PNG)));
         backButton.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, backHandler);
 
         root.getChildren().add(titleText);

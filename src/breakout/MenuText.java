@@ -4,6 +4,9 @@ import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
+/**
+ * A class to handle standard text on the Main Menu pages, usually within boxes
+ */
 public class MenuText extends Text{
 
     /**

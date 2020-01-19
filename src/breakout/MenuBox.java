@@ -13,6 +13,10 @@ import javafx.scene.text.Font;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A class to handle all boxes/buttons on the home screen
+ * Built to include images and text, with support for effects and EventHandlers
+ */
 public class MenuBox extends Rectangle {
 
     private static final double BOX_WIDTH = MenuPage.BOX_WIDTH;
@@ -89,16 +93,11 @@ public class MenuBox extends Rectangle {
     }
 
     /**
-     * Sets the image to display on top of the box
+     * Sets the image to display on top of the box, without adding effect to Image
      * @param image to display
      */
     public void setImage(Image image) {
-        myImage = new ImageView(image);
-        myImage.setX(this.getX());
-        myImage.setY(this.getY());
-        myImage.setFitWidth(this.getWidth());
-        myImage.setFitHeight(this.getHeight());
-        myImage.setPreserveRatio(true);
+        myImage = new IconView(image, this.getX(), this.getY(), this.getWidth(), this.getHeight(), true);
     }
 
     /**

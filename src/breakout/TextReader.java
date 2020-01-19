@@ -4,7 +4,10 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.lang.StringBuilder;
 
-// class based on tutorial from https://www.geeksforgeeks.org/different-ways-reading-text-file-java/
+/**
+ * A class to read in text from a file and return it as a String
+ *  Implementation based on tutorial from https://www.geeksforgeeks.org/different-ways-reading-text-file-java/
+ */
 public class TextReader {
 
     /**

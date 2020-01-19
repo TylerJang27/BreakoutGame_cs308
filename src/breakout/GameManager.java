@@ -1,4 +1,98 @@
 package breakout;
 
+import javafx.event.EventHandler;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.List;
+
+/**
+ * A class to handle all of the scenes and nodes associated with the Game environment
+ */
 public class GameManager {
+    public static final double SIZE = Main.SIZE;
+
+    private static final Paint BACKGROUND = Main.BACKGROUND;
+    private static final int DEFAULT_LIVES = 3;
+
+    private double sceneWidth;
+    private double sceneHeight;
+    private double centerX;
+    private Scene myScene;
+    private ToolBar myToolBar;
+    private int lives;
+    private long score;
+    private int myLevel;
+
+    /**
+     * Constructor to create a GameManager object
+     * @param width     int width for the entire scene
+     * @param height    int height for the entire scene
+     */
+    public GameManager (double width, double height) throws FileNotFoundException {
+        sceneWidth = width;
+        sceneHeight = height;
+        centerX = sceneWidth / 2;
+        initializeSettings(1);
+        myToolBar = new ToolBar(sceneWidth, sceneHeight, lives, score);
+        myScene = setupGame(1);
+    }
+
+    /**
+     * Resets all game settings, including lives, level, and score
+     * @param level     The level to reset to
+     */
+    public void initializeSettings(int level) {
+        lives = DEFAULT_LIVES;
+        score = 0;
+        setLevel(level);
+    }
+
+    /**
+     * Sets the level counter to level
+     * @param level     The level to reset to
+     */
+    public void setLevel(int level) {
+        myLevel = level;
+    }
+
+    /**
+     * Retrieves a List of the nodes comprising the top toolbar
+     * @return List of nodes
+     */
+    private List<Node> getToolBar() {
+        myToolBar.setScore(score);
+        return myToolBar.getAllNodes();
+    }
+
+    /**
+     * Accessor for the current Scene
+     * @return myScene, the current Scene
+     */
+    public Scene getMyScene() {
+        return myScene;
+    }
+
+    /**
+     * Creates the game environment, with player, blocks, and all other entities
+     * @return Scene with all game elements
+     */
+    private Scene setupGame(int level) {
+        Group root = new Group();
+
+
+        root.getChildren().addAll(getToolBar());
+        return new Scene(root, sceneWidth, sceneHeight, BACKGROUND);
+    }
+
+
 }
