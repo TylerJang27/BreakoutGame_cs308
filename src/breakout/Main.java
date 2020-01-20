@@ -82,6 +82,11 @@ public class Main extends Application {
      * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     private void step (double elapsedTime, Stage stage) throws FileNotFoundException {
+        /**
+         * BUG: once game has ended (through death or quit), only the Start button works
+         * Has something to do with how the Scene references are passed around
+         */
+
         if (!inGame) {
             myScene = myMenu.getMyScene();
             if (myScene.equals(myGameManager.getMyScene())) {
