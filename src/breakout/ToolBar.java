@@ -10,7 +10,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -26,10 +25,10 @@ public class ToolBar {
     private static String SCORE_PNG = "Resources/score.png";
     private static int MAX_LIFE_DISPLAY = 8;
     private static Font SCORE_FONT = new Font("Stencil", 35);
+    private static final double sceneWidth = Main.WIDTH;
+    private static final double sceneHeight = Main.HEIGHT;
+    private static final double barHeight = sceneHeight / 15;;
 
-    private double sceneWidth;
-    private double sceneHeight;
-    private double barHeight;
     private Rectangle blackBar;
     private ImageView hearts;
     private ImageView scoreImage;
@@ -40,17 +39,11 @@ public class ToolBar {
 
     /**
      * Constructor to create a ToolBar object
-     * @param width     width of the Scene
-     * @param height    height of the Scene
      * @param lives          the number of lives the player has
      * @param score          the player's score
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
-    public ToolBar(double width, double height, int lives, long score) throws FileNotFoundException {
-        sceneWidth = width;
-        sceneHeight = height;
-        barHeight = sceneHeight / 15;
-
+    public ToolBar(int lives, long score) throws FileNotFoundException {
         blackBar = new Rectangle(0, 0, sceneWidth, barHeight);
         blackBar.setFill(Color.BLACK);
 
@@ -78,10 +71,10 @@ public class ToolBar {
      * Creates a List of hearts representing lives
      * @param lives     the number of lives the player has left
      * @return hearts   an ImageView of the lives left
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     public ImageView resetHearts(int lives) throws FileNotFoundException {
-        hearts = new IconView(new Image(new FileInputStream(HEARTS + Math.max(Math.min(lives, 8), 0) + ".png")), 0, barHeight / 12, sceneWidth / 5, barHeight * 5 / 6, false);
+        hearts = new IconView(new Image(new FileInputStream(HEARTS + Math.max(Math.min(lives, MAX_LIFE_DISPLAY), 0) + ".png")), 0, barHeight / 12, sceneWidth / 5, barHeight * 5 / 6, false);
         return hearts;
     }
 

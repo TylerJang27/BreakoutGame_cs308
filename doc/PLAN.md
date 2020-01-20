@@ -37,25 +37,31 @@ If the bouncer collides with a flat side of the rectangle, it will bounce as if 
 ### Power Up Ideas
 Power ups will fall downward from some destroyed bricks. Power ups will all have the same skin until caught by the pad.
 
-####Multiball
+**Multiball**
+
 The player will release another bouncer, in addition to the first. Only when all bouncers hit the bottom of the level will the player lose a life.
 
-####Heavy ball
+**Heavy ball**
+
 The bouncer will degrade brick and boss hp by 2 for a short period.
 
-####Extra life
+**Extra life**
+
 The player will gain an extra life (max 5).
 
-####Shield
+**Shield**
+
 The player will be invulnerable to the boss's lasers for a short time.
 
 ### Cheat Key Ideas
 There will be a few cheat codes that may be used by the player and for debugging purposes.
 
-####8: Critical Hit
+**8: Critical Hit**
+
 All bricks and the boss (if present) will take one hp damage.
 
-####P: Power Up
+**P: Power Up**
+
 The player will gain the effect of all power ups for the remainder of the game.
 
 ### Something Extra

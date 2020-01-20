@@ -1,12 +1,12 @@
 package breakout;
 
 import javafx.scene.image.Image;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 /**
  * A class to handle the player's ball(s)
+ * Extends Entity, a parent Powerup
  */
 public class Ball extends Entity {
 
@@ -25,7 +25,7 @@ public class Ball extends Entity {
 
     /**
      * Default constructor for Ball, a child of Entity
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     public Ball() throws FileNotFoundException {
         this(new Image(new FileInputStream(BALL_PNG)));

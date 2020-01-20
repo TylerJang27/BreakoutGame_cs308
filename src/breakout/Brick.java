@@ -4,7 +4,6 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
@@ -14,7 +13,6 @@ import java.io.FileNotFoundException;
 public class Brick extends Rectangle {
 
     private int hp;
-    private int id;
     private int powerup;
     private static final String HP_3 = "Resources/grey_brick.png";
     private static final String HP_2 = "Resources/red_brick.png";
@@ -27,13 +25,11 @@ public class Brick extends Rectangle {
      * @param x     The x coordinate of the upper left corner of the brick
      * @param y     The y coordinate of the upper left corner of the brick
      * @param hp    How many hit points the brick has
-     * @param id    The id number of the brick
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
-    public Brick(double x, double y, int hp, int id, int powerup) throws FileNotFoundException {
+    public Brick(double x, double y, int hp, int powerup) throws FileNotFoundException {
         super(x, y, BRICK_WIDTH, BRICK_HEIGHT);
         this.hp = hp;
-        this.id = id;
         this.powerup = powerup;
         this.setFill(Color.GREY);
         updateSkin();
@@ -41,7 +37,7 @@ public class Brick extends Rectangle {
 
     /**
      * Sets the skin for the Brick based on its hp level
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     private void updateSkin() throws FileNotFoundException {
         if (hp == 1) {
@@ -66,7 +62,7 @@ public class Brick extends Rectangle {
      * Reduces the hp of the Brick by damage
      * @param damage    The amount of hp to deduct
      * @return 0 if destroyed, -1 if not destroyed
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     public int takeDamage(int damage) throws FileNotFoundException {
         hp -= damage;

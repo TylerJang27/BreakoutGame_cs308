@@ -2,7 +2,6 @@ package breakout;
 
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -20,6 +19,11 @@ public class Enemy extends Entity {
     private int id;
     private int skinCounter;
 
+    /**
+     * Constructor for default Enemy Boss
+     * Sets position, skin of boss
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
+     */
     public Enemy () throws FileNotFoundException {
         super(new Image(new FileInputStream(SKIN_PATH + "1.png")));
         skins = new ArrayList<Image>();
@@ -33,6 +37,12 @@ public class Enemy extends Entity {
         this.setRadius(Main.WIDTH / 12);
     }
 
+    /**
+     * Reduces the hp of the Enemy by damage amount
+     * If no hp remaining, return 0 to signify destruction
+     * @param damage amount to reduce hp
+     * @return 0 for destruction, -1 for no effect
+     */
     public int takeDamage(int damage) {
         hp -= damage;
         if (hp <= 0) {
@@ -42,6 +52,9 @@ public class Enemy extends Entity {
         return -1;
     }
 
+    /**
+     * Animates to change the boss's skin
+     */
     public void step() {
         this.setFill(new ImagePattern(skins.get(skinCounter)));
         if (skinCounter >= 3) {

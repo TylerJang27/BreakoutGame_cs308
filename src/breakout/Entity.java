@@ -3,12 +3,9 @@ package breakout;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
-
-import java.util.List;
 
 /**
- * A class to handle all the following in-game entities:
+ * An abstract class to handle all the following in-game entities:
  *          Ball
  *          Power Up
  */

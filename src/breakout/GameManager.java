@@ -49,14 +49,14 @@ public class GameManager {
      * Constructor to create a GameManager object
      * @param width     int width for the entire scene
      * @param height    int height for the entire scene
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     public GameManager (double width, double height) throws FileNotFoundException {
         sceneWidth = width;
         sceneHeight = height;
         centerX = sceneWidth / 2;
         initializeSettings();
-        myToolBar = new ToolBar(sceneWidth, sceneHeight, lives, score);
+        myToolBar = new ToolBar(lives, score);
         bricks = new ArrayList<Brick>();
         enemies = new ArrayList<Enemy>();
         lasers = new ArrayList<Laser>();
@@ -68,7 +68,7 @@ public class GameManager {
 
     /**
      * Resets all game settings, including lives, level, and score
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     public void initializeSettings() {
         lethality = 1;
@@ -82,7 +82,7 @@ public class GameManager {
 
     /**
      * Adds an additional life, for use in powerups and cheat codes
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     public void bonusLife() throws FileNotFoundException {
         lives += 1;
@@ -92,7 +92,7 @@ public class GameManager {
 
     /**
      * Deals 1 damage to all hittable elements
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     public void critHit() throws FileNotFoundException {
         for (Brick br: bricks) {
@@ -107,7 +107,7 @@ public class GameManager {
      * A handler for all power ups (see cheatcodes)
      * @param powerup   numbers 0 through 4
      * @param time      the duration the powerup should last
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     public void powerupHandler(int powerup, double time) throws FileNotFoundException {
         if (powerup == 0) {             //shield
@@ -135,7 +135,7 @@ public class GameManager {
     /**
      * Retrieves a List of the nodes comprising the top toolbar
      * @return List of nodes
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     private List<Node> getToolBar() throws FileNotFoundException {
         myToolBar.setScore(score);
@@ -185,7 +185,7 @@ public class GameManager {
 
     /**
      * Tests for collision with all objects
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     private void collision() throws FileNotFoundException {
         wallCollision();
@@ -216,7 +216,7 @@ public class GameManager {
 
     /**
      * Tests for all ball collisions with bricks
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     private void brickCollision() throws FileNotFoundException {
         for (Ball b: balls) {
@@ -252,7 +252,7 @@ public class GameManager {
      * @param br            a pointer to the brick
      * @param cenX          the x location to spawn powerup
      * @param cenY          the y location to spawn powerup
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     private void destroyBrick(int brickCounter, Brick br, double cenX, double cenY) throws FileNotFoundException {
         if (br.takeDamage(lethality) == 0) {
@@ -291,7 +291,7 @@ public class GameManager {
 
     /**
      * Tests for all ball collisions with boss, allowing for scalability
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     private void enemyCollision() throws FileNotFoundException {
         for (Ball b: balls) {
@@ -301,6 +301,8 @@ public class GameManager {
                 if (distance < b.getRadius() + e.getRadius()) {
                     b.collideFlatHoriz();
                     b.collideFlatVert();
+                    b.setxVelocity(b.getxVelocity() + Math.random());
+                    b.setyVelocity((b.getyVelocity() + Math.random()));
                     score += 5;
                     getToolBar();
                     if (e.takeDamage(lethality) == 0) {
@@ -331,7 +333,7 @@ public class GameManager {
 
     /**
      * Tests for collision with powerup, granting effect
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     private void powerupCollision() throws FileNotFoundException {
         for (int powerupCounter = powerups.size() - 1; powerupCounter >= 0; powerupCounter --) {
@@ -362,7 +364,7 @@ public class GameManager {
     /**
      * Sets the level counter to level
      * @param level     The level to reset to
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */ //TODO: IMPLEMENT QUIT
     public void setLevel(int level) throws FileNotFoundException {
         myLevel = level;
@@ -378,7 +380,7 @@ public class GameManager {
                 for (int mark = 0; mark < line.length; mark++) {
                     int hp = Integer.parseInt(line[mark]);
                     if (hp > 0) {
-                        bricks.add(new Brick(mark * BRICK_WIDTH, BRICK_HEIGHT * (1.5 + l), hp, bricks.size(), (int) (Math.pow(Math.random(), 10) * NUM_POWERUPS) - 1));
+                        bricks.add(new Brick(mark * BRICK_WIDTH, BRICK_HEIGHT * (1.5 + l), hp, (int) (Math.pow(Math.random(), 10) * NUM_POWERUPS) - 1));
                     }
                 }
             }
@@ -392,10 +394,11 @@ public class GameManager {
     /**
      * Creates the game environment, with player, blocks, and all other entities
      * @return Scene with all game elements
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     public void populateScene(int level) throws FileNotFoundException {
         root = new Group(); //had to make instance in order to add new items (e.g. multiball, update ToolBar)
+        //TODO: TRY TO RESOLVE
 
         balls = new ArrayList<Ball>();
         balls.add(new Ball());
@@ -414,7 +417,7 @@ public class GameManager {
     /**
      * Queues the next step for all balls and entities
      * @param elapsedTime   time since last step
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     public void step(double elapsedTime) throws FileNotFoundException {
         elapsedGameTime += elapsedTime;

@@ -10,25 +10,41 @@ import java.io.FileNotFoundException;
  */
 public class Powerup extends Entity {
 
-    private static final String POWERUP_PNG = "Resources/powerup.png";
+    private static final String SHIELD_PNG = "Resources/shield.png";
+    private static final String MULTI_PNG = "Resources/multi.png";
+    private static final String HEAVY_PNG = "Resources/heavy.png";
+    private static final String BONUS_PNG = "Resources/bonus_life.png";
+    private static final String[] SKINS = {SHIELD_PNG, MULTI_PNG, HEAVY_PNG, BONUS_PNG};
+
     private static final int FALL_RATE = 5;
 
     private int powerupID;
+    /**
+     * ID:
+     *      1 = shield
+     *      2 = multiball
+     *      3 = heavyball
+     *      4 = bonus life
+     */
 
     /**
      * Constructor for powerup
      * @param x     Location of centerX
      * @param y     Location of centerY
-     * @param id    Type of powerup
-     * @throws FileNotFoundException
+     * @param id    Type of powerup, 1-4
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     public Powerup(double x, double y, int id) throws FileNotFoundException {
-        super(new Image(new FileInputStream(POWERUP_PNG)), x, y);
+        super(new Image(new FileInputStream(SKINS[id])), x, y);
         powerupID = id;
         this.setxVelocity(0);
         this.setyVelocity(FALL_RATE);
     }
 
+    /**
+     * Signifies the powerup has been caught
+     * @return powerupID    id corresponding to the desired effect
+     */
     public int recover() {
         this.setCenterY(Main.HEIGHT * 2);
         return powerupID;

@@ -20,7 +20,7 @@ public class Laser extends Rectangle {
 
     /**
      * Laser constructor, with random X position
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     public Laser() throws FileNotFoundException {
         super(Math.random() * (Main.WIDTH - LASER_WIDTH), Main.HEIGHT / 4, LASER_WIDTH, LASER_HEIGHT);

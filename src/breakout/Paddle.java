@@ -19,7 +19,7 @@ public class Paddle extends Rectangle {
      * Constructor for the player paddle
      * @param x     the x coordinate for the paddle's upper left
      * @param y     the y coordinate for the paddle's upper left
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     public Paddle(double x, double y) throws FileNotFoundException {
         super(x, y, BRICK_WIDTH, BRICK_HEIGHT);

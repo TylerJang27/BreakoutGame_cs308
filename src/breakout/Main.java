@@ -39,7 +39,7 @@ public class Main extends Application {
     /**
      * Initialize the scene to start
      * @param stage     Stage on which to show game
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     @Override
     public void start (Stage stage) throws FileNotFoundException {
@@ -59,7 +59,7 @@ public class Main extends Application {
             } catch (FileNotFoundException ex) {
                 ex.printStackTrace();
             }
-        }); //TODO: IMPLEMENT AN ANIMATION
+        });
         Timeline animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
@@ -79,7 +79,7 @@ public class Main extends Application {
      * Updates the scene upon clicks
      * @param elapsedTime   Amount of time since last step
      * @param stage         Stage on which to show game
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     private void step (double elapsedTime, Stage stage) throws FileNotFoundException {
         if (!inGame) {
@@ -108,7 +108,7 @@ public class Main extends Application {
     /**
      * Handles input for all the cheat codes
      * @param code Keyboard input
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     private void handleKeyInput (KeyCode code, double elapsedTime) throws FileNotFoundException {
         if (code == KeyCode.DIGIT8) {

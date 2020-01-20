@@ -137,7 +137,7 @@ public class MenuPage {
     /**
      * Creates the Levels page, with Levels and back button
      * @return Scene of the Levels page
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     private Scene setupLevel() throws FileNotFoundException {
         Group root = new Group();
@@ -207,7 +207,7 @@ public class MenuPage {
     /**
      * Creates the Help page, with description and back button
      * @return Scene of the Help page
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     private Scene setupHelp() throws FileNotFoundException {
         Group root = new Group();
