@@ -36,9 +36,9 @@ public class GameManager {
     private double powerupDelay;
     private Scene myScene;
     private ToolBar myToolBar;
-    private int lives; //TODO: MIGRATE TO TOOLBAR
-    private long score; //TODO: MIGRATE TO TOOLBAR
-    private int lethality; //TODO: MIGRATE TO BALL
+    private int lives;
+    private long score;
+    private int lethality;
     private int myLevel;
     private MenuPage menuPage;
     private Paddle paddle;
@@ -96,11 +96,15 @@ public class GameManager {
      * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
     public void critHit() throws FileNotFoundException {
-        for (Brick br: bricks) {
-            br.takeDamage(1);
+        for (int brickCounter = bricks.size() - 1; brickCounter >= 0; brickCounter --) {
+            if (bricks.get(brickCounter).takeDamage(1) == 0) {
+                bricks.remove(brickCounter);
+            }
         }
-        for (Enemy e: enemies) {
-            e.takeDamage(1);
+        for (int enemyCounter = enemies.size() - 1; enemyCounter >= 0; enemyCounter --) {
+            if (enemies.get(enemyCounter).takeDamage(1) == 0) {
+                enemies.remove(enemyCounter);
+            }
         }
     }
 
