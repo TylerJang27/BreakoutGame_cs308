@@ -9,8 +9,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
-
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
@@ -24,7 +22,6 @@ public class MenuPage {
     public static final double BOX_HEIGHT = BOX_SIZE / 4;
 
     private static final String INSTRUCTIONS_TXT = "Resources/instructions.txt";
-    //TODO: FIX PUBLICITY
     private static final String TITLE = Main.TITLE;
     private static final Paint BACKGROUND = Main.BACKGROUND;
     private static final String START_TEXT = "START";
@@ -75,18 +72,17 @@ public class MenuPage {
     /**
      * Creates the Main Menu page, with title and three buttons
      * Has buttons to go to Level 1, Help screen, and any Level
-     * @return Scene of the Main Menu page
+     * Sets myScene to be the main menu
+     * Also acts as a quit feature
+     * @return a generated scene with the main menu
      */
-    private Scene setupMenu() {
+    public Scene setupMenu() {
 
         Group root = new Group();
 
         MenuText titleText = new MenuText(centerX, sceneHeight / 4 + BOX_HEIGHT / 5, TITLE, Main.TITLE_FONT);
 
-        MenuBox startBox = new MenuBox(centerX, sceneHeight / 2 - BOX_HEIGHT / 2, START_TEXT);
-        MenuBox helpBox = new MenuBox(centerX, sceneHeight / 2 + BOX_HEIGHT, HELP_TEXT);
-        MenuBox levelBox = new MenuBox(centerX, sceneHeight / 2 + BOX_HEIGHT * 5 / 2, LEVEL_TEXT);
-
+        //on clicking start, start level1
         EventHandler <MouseEvent> startHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent e) {
@@ -99,6 +95,7 @@ public class MenuPage {
             }
         };
 
+        //on clicking help, build help scene
         EventHandler <MouseEvent> helpHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent e) {
@@ -110,6 +107,7 @@ public class MenuPage {
             }
         };
 
+        //on clicking level, build level scene
         EventHandler <MouseEvent> levelHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent e) {
@@ -121,11 +119,10 @@ public class MenuPage {
             }
         };
 
-        startBox.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, startHandler);
-        helpBox.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, helpHandler);
-        levelBox.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, levelHandler);
+        MenuBox startBox = new MenuBox(centerX, sceneHeight / 2 - BOX_HEIGHT / 2, START_TEXT, startHandler);
+        MenuBox helpBox = new MenuBox(centerX, sceneHeight / 2 + BOX_HEIGHT, HELP_TEXT, helpHandler);
+        MenuBox levelBox = new MenuBox(centerX, sceneHeight / 2 + BOX_HEIGHT * 5 / 2, LEVEL_TEXT, levelHandler);
 
-        //TODO: DRY
         root.getChildren().add(titleText);
         root.getChildren().addAll(startBox.getAllNodes());
         root.getChildren().addAll(helpBox.getAllNodes());
@@ -146,8 +143,7 @@ public class MenuPage {
 
         String level = LEVEL_TEXT.substring(0, LEVEL_TEXT.length() - 1) + " ";
 
-        //TODO: LOOPIFY, DRY
-
+        //on clicking level N, start level N
         EventHandler <MouseEvent> level1Handler = new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent e) {
@@ -182,19 +178,12 @@ public class MenuPage {
             }
         };
 
-        MenuBox level1Box = new MenuBox(centerX, sceneHeight / 4, level + "1");
-        MenuBox level2Box = new MenuBox(centerX, sceneHeight / 2, level + "2");
-        MenuBox level3Box = new MenuBox(centerX, sceneHeight * 3 / 4, level + "3");
+        MenuBox level1Box = new MenuBox(centerX, sceneHeight / 4, level + "1", level1Handler);
+        MenuBox level2Box = new MenuBox(centerX, sceneHeight / 2, level + "2", level2Handler);
+        MenuBox level3Box = new MenuBox(centerX, sceneHeight * 3 / 4, level + "3", level3Handler);
 
-        level1Box.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, level1Handler);
-        level2Box.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, level2Handler);
-        level3Box.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, level3Handler);
+        MenuBox backButton = new MenuBox(sceneWidth / 10, sceneHeight / 10, BOX_HEIGHT, BOX_HEIGHT, Color.DARKGREY, "", new Image(new FileInputStream(BACK_PNG)), backHandler);
 
-
-        MenuBox backButton = new MenuBox(sceneWidth / 10, sceneHeight / 10, BOX_HEIGHT, BOX_HEIGHT, Color.DARKGREY, "", new Image(new FileInputStream(BACK_PNG)));
-        backButton.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, backHandler);
-
-        //TODO: DRY
         root.getChildren().add(titleText);
         root.getChildren().addAll(level1Box.getAllNodes());
         root.getChildren().addAll(level2Box.getAllNodes());
@@ -218,10 +207,7 @@ public class MenuPage {
         MenuText instructionsText = new MenuText(centerX, sceneHeight / 3, instructions, new Font("Calibri", BOX_SIZE / 12));
         instructionsText.setTextAlignment(TextAlignment.CENTER);
 
-        //TODO: ADD ICONS
-
-        MenuBox backButton = new MenuBox(sceneWidth / 10, sceneHeight / 10, BOX_HEIGHT, BOX_HEIGHT, Color.DARKGREY, "", new Image(new FileInputStream(BACK_PNG)));
-        backButton.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, backHandler);
+        MenuBox backButton = new MenuBox(sceneWidth / 10, sceneHeight / 10, BOX_HEIGHT, BOX_HEIGHT, Color.DARKGREY, "", new Image(new FileInputStream(BACK_PNG)), backHandler);
 
         root.getChildren().add(titleText);
         root.getChildren().add(instructionsText);

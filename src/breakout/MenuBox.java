@@ -37,8 +37,9 @@ public class MenuBox extends Rectangle {
      * @param color     color of rectangle
      * @param text      text of button
      * @param image     image to display on box
+     * @param handler
      */
-    public MenuBox(double x, double y, double width, double height, Color color, String text, Image image) {
+    public MenuBox(double x, double y, double width, double height, Color color, String text, Image image, EventHandler<MouseEvent> handler) {
         super(x - width / 2, y, width, height);
         this.setFill(color);
         this.setArcWidth(width / 5);
@@ -46,6 +47,8 @@ public class MenuBox extends Rectangle {
         this.setImage(image);
 
         myText = new MenuText(x, y + height * 2 / 3, text, MENU_FONT);
+
+        this.addMouseEventHandler(MouseEvent.MOUSE_CLICKED, handler);
 
         glow = new Glow();
         glow.setLevel(0.3);
@@ -78,7 +81,7 @@ public class MenuBox extends Rectangle {
      * @param text      text of button
      */
     public MenuBox(double x, double y, double width, double height, Color color, String text) {
-        this(x, y, width, height, color, text, null);
+        this(x, y, width, height, color, text, null, null);
     }
 
     /**
@@ -88,8 +91,8 @@ public class MenuBox extends Rectangle {
      * @param y         y coordinate of bottom left corner
      * @param text      text of button
      */
-    public MenuBox(double x, double y, String text) {
-        this(x, y, BOX_WIDTH, BOX_HEIGHT, Color.DARKGREY, text);
+    public MenuBox(double x, double y, String text, EventHandler<MouseEvent> handler) {
+        this(x, y, BOX_WIDTH, BOX_HEIGHT, Color.DARKGREY, text, null, handler);
     }
 
     /**

@@ -45,7 +45,7 @@ public class Main extends Application {
     public void start (Stage stage) throws FileNotFoundException {
         inGame = false;
         myMenu = new MenuPage(WIDTH, HEIGHT);
-        myGameManager = new GameManager(WIDTH, HEIGHT);
+        myGameManager = new GameManager(myMenu);
         myMenu.setMyGameManager(myGameManager);
 
         myScene = myMenu.getMyScene();

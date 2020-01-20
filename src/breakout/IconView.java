@@ -4,7 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- * An ImageView wrapper that handles additional parameterization
+ * An ImageView wrapper that handles additional parameterization, used for various icons
  */
 public class IconView extends ImageView {
 

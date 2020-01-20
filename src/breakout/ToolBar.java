@@ -35,15 +35,14 @@ public class ToolBar {
     private Text scoreText;
     private ImageView quitImage;
 
-
-
     /**
      * Constructor to create a ToolBar object
      * @param lives          the number of lives the player has
      * @param score          the player's score
+     * @param gameManager
      * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
-    public ToolBar(int lives, long score) throws FileNotFoundException {
+    public ToolBar(int lives, long score, GameManager gameManager) throws FileNotFoundException {
         blackBar = new Rectangle(0, 0, sceneWidth, barHeight);
         blackBar.setFill(Color.BLACK);
 
@@ -60,7 +59,8 @@ public class ToolBar {
         EventHandler<MouseEvent> quitHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent e) {
-                //TODO: QUIT
+                gameManager.setupMenu();
+                gameManager.initializeSettings();
             }
         };
 

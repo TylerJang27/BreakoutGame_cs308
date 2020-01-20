@@ -3,7 +3,6 @@ package breakout;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
@@ -12,6 +11,7 @@ public class Paddle extends Rectangle {
 
     private static final int PADDLE_SPEED = 50;
     private static final String PADDLE_PNG = "Resources/paddle.png";
+    public static final int SCENE_WIDTH = Main.WIDTH;
     private static final double BRICK_WIDTH = GameManager.BRICK_WIDTH;
     private static final double BRICK_HEIGHT = GameManager.BRICK_HEIGHT;
 
@@ -58,8 +58,8 @@ public class Paddle extends Rectangle {
      * @param elapsedTime   deltaT
      */
     public void moveRight(double elapsedTime) {
-        if (!isFrozen() && this.getX() + this.getWidth() < Main.WIDTH) {
-            this.setX(Math.min(this.getX() + elapsedTime * PADDLE_SPEED, Main.WIDTH - this.getWidth()));
+        if (!isFrozen() && this.getX() + this.getWidth() < SCENE_WIDTH) {
+            this.setX(Math.min(this.getX() + elapsedTime * PADDLE_SPEED, SCENE_WIDTH - this.getWidth()));
         }
     }
 }

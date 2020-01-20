@@ -12,9 +12,13 @@ import java.util.List;
  * A class to handle all of the scenes and nodes associated with the Game environment
  */
 public class GameManager {
-    public static final double BRICK_WIDTH = Main.WIDTH / 15;
-    public static final double BRICK_HEIGHT = Main.HEIGHT / 15;
-    public static final int NUM_POWERUPS = 5;       //-1 signifies no powerup
+    private static final double SCENE_WIDTH = Main.WIDTH;
+    private static final double SCENE_HEIGHT = Main.HEIGHT;
+    private static final double centerX = SCENE_WIDTH / 2;
+
+    public static final double BRICK_WIDTH = SCENE_WIDTH / 15;
+    public static final double BRICK_HEIGHT = SCENE_HEIGHT / 15;
+    public static final int NUM_POWERUPS = 5;       //-1 to 3, where -1 signifies no powerup
 
     private static final int DEFAULT_SPEED = 5;
     private static final Paint BACKGROUND = Main.BACKGROUND;
@@ -25,9 +29,7 @@ public class GameManager {
     private static final String WIN_TEXT = "YOU WIN!";
 
     private double elapsedGameTime;
-    private double sceneWidth; //TODO: REMOVE
-    private double sceneHeight; //TODO: REMOVE
-    private double centerX; //TODO: REMOVE
+
     private double powerupStart;
     private double freezeStart;
     private double powerupDelay; //TODO: CONDENSE
@@ -37,6 +39,7 @@ public class GameManager {
     private long score; //TODO: MIGRATE TO TOOLBAR
     private int lethality; //TODO: MIGRATE TO BALL
     private int myLevel;
+    private MenuPage menuPage;
     private Paddle paddle;
     private List<Ball> balls;
     private List<Brick> bricks;
@@ -47,21 +50,18 @@ public class GameManager {
 
     /**
      * Constructor to create a GameManager object
-     * @param width     int width for the entire scene
-     * @param height    int height for the entire scene
-     * @throws FileNotFoundException if file name invalid (see TextReader.java)
+     *
+     * @param menuPage@throws FileNotFoundException if file name invalid (see TextReader.java)
      */
-    public GameManager (double width, double height) throws FileNotFoundException {
-        sceneWidth = width;
-        sceneHeight = height;
-        centerX = sceneWidth / 2;
+    public GameManager(MenuPage menuPage) throws FileNotFoundException {
+        this.menuPage = menuPage;
         initializeSettings();
-        myToolBar = new ToolBar(lives, score);
+        myToolBar = new ToolBar(lives, score, this);
         bricks = new ArrayList<Brick>();
         enemies = new ArrayList<Enemy>();
         lasers = new ArrayList<Laser>();
         powerups = new ArrayList<Powerup>();
-        paddle = new Paddle(centerX, Main.HEIGHT * 9 / 10);
+        paddle = new Paddle(centerX, SCENE_HEIGHT * 9 / 10);
         root = null;
         populateScene(1);
     }
@@ -143,6 +143,10 @@ public class GameManager {
         return myToolBar.getAllNodes();
     }
 
+    public void setupMenu() {
+        myScene = menuPage.setupMenu();
+    }
+
     /**
      * Accessor for the current Scene
      * @return myScene      the current Scene
@@ -202,13 +206,13 @@ public class GameManager {
     private void wallCollision() {
         for (int ballCounter = balls.size() - 1; ballCounter >= 0; ballCounter --) {
             Ball b = balls.get(ballCounter);
-            if (b.getCenterX() - b.getRadius() <= 0 || b.getCenterX() + b.getRadius() >= Main.WIDTH) {
+            if (b.getCenterX() - b.getRadius() <= 0 || b.getCenterX() + b.getRadius() >= SCENE_WIDTH) {
                 b.collideFlatVert();
-            } else if (b.getCenterY() - b.getRadius() <= Main.HEIGHT / 15) {
+            } else if (b.getCenterY() - b.getRadius() <= SCENE_HEIGHT / 15) {
                 b.collideFlatHoriz();
-            } else if (b.getCenterY() + b.getRadius() >= Main.HEIGHT) {
+            } else if (b.getCenterY() + b.getRadius() >= SCENE_HEIGHT) {
                 //ball falls off screen
-                b.setCenterY(Main.HEIGHT * 2);
+                b.setCenterY(SCENE_HEIGHT * 2);
                 balls.remove(ballCounter);
             }
         }
@@ -235,7 +239,8 @@ public class GameManager {
                         destroyBrick(brickCounter, br, cenX, cenY);
                         break;
                     }
-                } else if (cenY >= bot && cenY <= top) {
+                }
+                if (cenY >= bot && cenY <= top) {
                     if (cenX + rad > left && cenX - rad < right) {
                         b.collideFlatVert();
                         destroyBrick(brickCounter, br, cenX, cenY);
@@ -325,7 +330,7 @@ public class GameManager {
                     freezeStart = Math.max(freezeStart, elapsedGameTime);
                 }
             }
-            if (l.getY() > Main.HEIGHT) {
+            if (l.getY() > SCENE_HEIGHT) {
                 lasers.remove(laserCounter);
             }
         }
@@ -343,12 +348,15 @@ public class GameManager {
                     powerupHandler(p.recover(), powerupDelay);
                     powerups.remove(powerupCounter);
                 }
-            } else if (p.getCenterY() - p.getRadius() >= Main.HEIGHT) {
+            } else if (p.getCenterY() - p.getRadius() >= SCENE_HEIGHT) {
                 powerups.remove(powerupCounter);
             }
         }
     }
 
+    /**
+     * Releases ball upon trigger of spacebar, in slightly randomized direction
+     */
     public void launch() {
         for (Ball b: balls) {
             if (!b.getLaunched()) {
@@ -365,7 +373,7 @@ public class GameManager {
      * Sets the level counter to level
      * @param level     The level to reset to
      * @throws FileNotFoundException if file name invalid (see TextReader.java)
-     */ //TODO: IMPLEMENT QUIT
+     */
     public void setLevel(int level) throws FileNotFoundException {
         myLevel = level;
         paddle.setX(centerX - paddle.getWidth() / 2);
@@ -411,7 +419,7 @@ public class GameManager {
         root.getChildren().addAll(enemies);
         root.getChildren().addAll(balls);
         root.getChildren().add(paddle);
-        myScene = new Scene(root, sceneWidth, sceneHeight, BACKGROUND);
+        myScene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT, BACKGROUND);
     }
 
     /**
@@ -465,13 +473,14 @@ public class GameManager {
         } else {
             MenuText endText;
             if (lives <= 0) {   //Lose
-                endText = new MenuText(Main.WIDTH / 2, Main.HEIGHT / 2, LOSE_TEXT, Main.TITLE_FONT);
+                endText = new MenuText(SCENE_WIDTH / 2, SCENE_HEIGHT / 2, LOSE_TEXT, Main.TITLE_FONT);
             } else {            //Win
-                endText = new MenuText(Main.WIDTH / 2, Main.HEIGHT / 2, WIN_TEXT, Main.TITLE_FONT);
+                endText = new MenuText(SCENE_WIDTH / 2, SCENE_HEIGHT / 2, WIN_TEXT, Main.TITLE_FONT);
             }
             root.getChildren().add(endText);
             if (elapsedGameTime > endTime + DELAY_TIME) {
-                //TODO: QUIT
+                setupMenu();
+                initializeSettings();
             }
         }
     }
