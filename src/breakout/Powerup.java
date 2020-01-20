@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
  */
 public class Powerup extends Entity {
 
+    private static final double SCENE_HEIGHT = Main.HEIGHT;
     private static final String SHIELD_PNG = "Resources/shield.png";
     private static final String MULTI_PNG = "Resources/multi.png";
     private static final String HEAVY_PNG = "Resources/heavy.png";
@@ -45,7 +46,7 @@ public class Powerup extends Entity {
      * @return powerupID    id corresponding to the desired effect
      */
     public int recover() {
-        this.setCenterY(Main.HEIGHT * 2);
+        this.setCenterY(SCENE_HEIGHT * 2);
         return powerupID;
     }
 

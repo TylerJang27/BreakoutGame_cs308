@@ -17,6 +17,7 @@ public class Brick extends Rectangle {
     private static final String HP_3 = "Resources/grey_brick.png";
     private static final String HP_2 = "Resources/red_brick.png";
     private static final String HP_1 = "Resources/blue_brick.png";
+    private static final double SCENE_HEIGHT = Main.HEIGHT;
     private static final double BRICK_WIDTH = GameManager.BRICK_WIDTH;
     private static final double BRICK_HEIGHT = GameManager.BRICK_HEIGHT;
 
@@ -68,7 +69,7 @@ public class Brick extends Rectangle {
         hp -= damage;
         updateSkin();
         if (hp <= 0) {
-            this.setY(Main.HEIGHT * 2);
+            this.setY(SCENE_HEIGHT * 2);
             return 0;
         }
         return -1;

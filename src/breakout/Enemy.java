@@ -12,6 +12,8 @@ import java.util.List;
  */
 public class Enemy extends Entity {
 
+    private static final double SCENE_WIDTH = Main.WIDTH;
+    private static final double SCENE_HEIGHT = Main.HEIGHT;
     private static final int BOSS_MAX_HEALTH = 20;
     private static final String SKIN_PATH = "Resources/dr_brick_";
     private List<Image> skins;
@@ -32,9 +34,9 @@ public class Enemy extends Entity {
         }
         skinCounter = 0;
         hp = BOSS_MAX_HEALTH;
-        this.setCenterX(Main.WIDTH / 2);
-        this.setCenterY(Main.HEIGHT / 4);
-        this.setRadius(Main.WIDTH / 12);
+        this.setCenterX(SCENE_WIDTH / 2);
+        this.setCenterY(SCENE_HEIGHT / 4);
+        this.setRadius(SCENE_WIDTH / 12);
     }
 
     /**
@@ -46,7 +48,7 @@ public class Enemy extends Entity {
     public int takeDamage(int damage) {
         hp -= damage;
         if (hp <= 0) {
-            this.setCenterY(Main.HEIGHT * 2);
+            this.setCenterY(SCENE_HEIGHT * 2);
             return 0;
         }
         return -1;

@@ -20,6 +20,7 @@ public class GameManager {
     public static final double BRICK_HEIGHT = SCENE_HEIGHT / 15;
     public static final int NUM_POWERUPS = 5;       //-1 to 3, where -1 signifies no powerup
 
+    private static final double POWERUP_TIME = Main.POWERUP_TIME;
     private static final int DEFAULT_SPEED = 5;
     private static final Paint BACKGROUND = Main.BACKGROUND;
     private static final int DEFAULT_LIVES = 3;
@@ -32,7 +33,7 @@ public class GameManager {
 
     private double powerupStart;
     private double freezeStart;
-    private double powerupDelay; //TODO: CONDENSE
+    private double powerupDelay;
     private Scene myScene;
     private ToolBar myToolBar;
     private int lives; //TODO: MIGRATE TO TOOLBAR
@@ -73,8 +74,8 @@ public class GameManager {
     public void initializeSettings() {
         lethality = 1;
         powerupStart = Double.MIN_VALUE;
-        freezeStart = Double.MIN_VALUE;
         powerupDelay = 0;
+        freezeStart = Double.MIN_VALUE;
         lives = DEFAULT_LIVES;
         score = 0;
         elapsedGameTime = 0;
@@ -345,7 +346,7 @@ public class GameManager {
             Powerup p = powerups.get(powerupCounter);
             if (p.getCenterX() + p.getRadius() >= paddle.getX() && p.getCenterX() - p.getRadius() <= paddle.getX() + paddle.getWidth()) {
                 if (p.getCenterY() + p.getRadius() >= paddle.getY()) {
-                    powerupHandler(p.recover(), powerupDelay);
+                    powerupHandler(p.recover(), POWERUP_TIME * 10);
                     powerups.remove(powerupCounter);
                 }
             } else if (p.getCenterY() - p.getRadius() >= SCENE_HEIGHT) {
@@ -406,7 +407,6 @@ public class GameManager {
      */
     public void populateScene(int level) throws FileNotFoundException {
         root = new Group(); //had to make instance in order to add new items (e.g. multiball, update ToolBar)
-        //TODO: TRY TO RESOLVE
 
         balls = new ArrayList<Ball>();
         balls.add(new Ball());
@@ -431,37 +431,19 @@ public class GameManager {
         elapsedGameTime += elapsedTime;
         double endTime = 0;
 
-        if (alive()) { //TODO: EXTRACT METHODS AND SHORTEN
+        if (alive()) {
             powerupUpdate(elapsedTime);
             freezeUpdate();
-            for (Enemy e: enemies) {
-                if (Math.round(elapsedGameTime) % 5 == 0) {
-                    e.step();
-                }
-                if (Math.round(elapsedGameTime) % 80 == 0) {
-                    Laser l = new Laser();
-                    lasers.add(l);
-                    root.getChildren().add(l);
-                }
-            }
-            for (Laser l: lasers) {
-                l.step(elapsedTime);
-            }
-
-            for (Ball b: balls) {
-                if (!b.getLaunched()) {
-                    b.setCenterX(paddle.getX() + paddle.getWidth() / 2);
-                    b.setCenterY(paddle.getY() - paddle.getHeight() / 2);
-                } else {
-                    b.step(elapsedTime);
-                }
-            }
+            enemyUpdate(elapsedTime);
+            ballUpdate(elapsedTime);
             collision();
 
+            //death condition
             if (balls.isEmpty()) {
                 lives -= 1;
                 populateScene(myLevel);
             }
+            //next level condition
             if (bricks.isEmpty() && enemies.isEmpty()) {
                 myLevel += 1;
                 score += 100;
@@ -482,6 +464,42 @@ public class GameManager {
                 setupMenu();
                 initializeSettings();
             }
+        }
+    }
+
+    /**
+     * Handles the status of the balls' steps and paddle sync
+     * @param elapsedTime amount of time since last step
+     */
+    private void ballUpdate(double elapsedTime) {
+        for (Ball b: balls) {
+            if (!b.getLaunched()) {
+                b.setCenterX(paddle.getX() + paddle.getWidth() / 2);
+                b.setCenterY(paddle.getY() - paddle.getHeight() / 2);
+            } else {
+                b.step(elapsedTime);
+            }
+        }
+    }
+
+    /**
+     * Handles the status of the enemy animation and lasers
+     * @param elapsedTime amount of time since last step
+     * @throws FileNotFoundException
+     */
+    private void enemyUpdate(double elapsedTime) throws FileNotFoundException {
+        for (Enemy e: enemies) {
+            if (Math.round(elapsedGameTime) % 5 == 0) {
+                e.step();
+            }
+            if (Math.round(elapsedGameTime) % 80 == 0) {
+                Laser l = new Laser();
+                lasers.add(l);
+                root.getChildren().add(l);
+            }
+        }
+        for (Laser l: lasers) {
+            l.step(elapsedTime);
         }
     }
 
