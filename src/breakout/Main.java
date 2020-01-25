@@ -23,7 +23,6 @@ public class Main extends Application {
     public static final int FRAMES_PER_SECOND = 60;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final Paint BACKGROUND = Color.CADETBLUE;
-
     public static final double POWERUP_TIME = 750;
     public static final int WIDTH = SIZE * 2;
     public static final int HEIGHT = SIZE;
@@ -141,7 +140,7 @@ public class Main extends Application {
         } else if (code == KeyCode.R) {
             //Reset to starting position
             if (inGame) {
-                myGameManager.populateScene(myGameManager.getLevel());
+                myGameManager.populateScene();
             }
         } else if (code == KeyCode.SPACE) {
             //launches ball

@@ -5,7 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 /**
- * A class for powerups released when certain bricks break
+ * A class for Power Ups released when certain bricks break
+ * Extends Entity, a parent of Ball
+ * Spawned in GameManager, upon a brick breaking, creating a Powerup instance based on the Brick's stored powerup int.
+ *
  */
 public class Powerup extends Entity {
 
@@ -37,12 +40,11 @@ public class Powerup extends Entity {
     public Powerup(double x, double y, int id) throws FileNotFoundException {
         super(new Image(new FileInputStream(SKINS[id])), x, y);
         powerupID = id;
-        this.setxVelocity(0);
-        this.setyVelocity(FALL_RATE);
+        this.setVelocity(0, FALL_RATE);
     }
 
     /**
-     * Signifies the powerup has been caught
+     * Signifies the powerup has been caught and returns the powerupID
      * @return powerupID    id corresponding to the desired effect
      */
     public int recover() {

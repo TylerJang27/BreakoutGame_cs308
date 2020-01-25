@@ -64,7 +64,7 @@ public class GameManager {
         powerups = new ArrayList<Powerup>();
         paddle = new Paddle(centerX, SCENE_HEIGHT * 9 / 10);
         root = null;
-        populateScene(1);
+        populateScene();
     }
 
     /**
@@ -130,14 +130,6 @@ public class GameManager {
     }
 
     /**
-     * Accessor for level
-     * @return level    the current game level
-     */
-    public int getLevel() {
-        return myLevel;
-    }
-
-    /**
      * Retrieves a List of the nodes comprising the top toolbar
      * @return List of nodes
      * @throws FileNotFoundException if file name invalid (see TextReader.java)
@@ -161,27 +153,11 @@ public class GameManager {
     }
 
     /**
-     * Accessor for the balls
-     * @return balls        the player's balls
-     */
-    public List<Ball> getBalls() {
-        return balls;
-    }
-
-    /**
      * Accessor for the paddle
      * @return paddle       the player's paddle
      */
     public Paddle getPaddle() {
         return paddle;
-    }
-
-    /**
-     * Accessor for elapsedGametime
-     * @return elapsedGameTime
-     */
-    public double getElapsedGameTime() {
-        return elapsedGameTime;
     }
 
     /**
@@ -292,8 +268,7 @@ public class GameManager {
                     double yVel = -1 * Math.abs(b.getyVelocity() - dy / BOUNCE_FACTOR);
                     xVel *= DEFAULT_SPEED / Math.sqrt(xVel * xVel + yVel * yVel);
                     yVel *= DEFAULT_SPEED / Math.sqrt(xVel * xVel + yVel * yVel);
-                    b.setxVelocity(xVel);
-                    b.setyVelocity(yVel);
+                    b.setVelocity(xVel, yVel);
                 }
             }
         }
@@ -311,8 +286,7 @@ public class GameManager {
                 if (distance < b.getRadius() + e.getRadius()) {
                     b.collideFlatHoriz();
                     b.collideFlatVert();
-                    b.setxVelocity(b.getxVelocity() + Math.random());
-                    b.setyVelocity((b.getyVelocity() + Math.random()));
+                    b.setVelocity(b.getxVelocity() + Math.random(), b.getyVelocity() + Math.random());
                     score += 5;
                     getToolBar();
                     if (e.takeDamage(lethality) == 0) {
@@ -366,9 +340,8 @@ public class GameManager {
         for (Ball b: balls) {
             if (!b.getLaunched()) {
                 double direction = Math.PI / 2 + (Math.random() - 0.5) / 2;
-                b.setxVelocity(Math.cos(direction) * DEFAULT_SPEED);
-                b.setyVelocity(Math.sin(direction) * DEFAULT_SPEED);
-                b.calcRad();
+                b.setVelocity(Math.cos(direction) * DEFAULT_SPEED, Math.sin(direction) * DEFAULT_SPEED);
+                b.calcSpeed();
                 b.launch();
             }
         }
@@ -400,7 +373,7 @@ public class GameManager {
             if (myLevel == 3) {
                 enemies.add(new Enemy());
             }
-            populateScene(level);
+            populateScene();
         }
     }
 
@@ -409,14 +382,13 @@ public class GameManager {
      * @return Scene with all game elements
      * @throws FileNotFoundException if file name invalid (see TextReader.java)
      */
-    public void populateScene(int level) throws FileNotFoundException {
+    public void populateScene() throws FileNotFoundException {
         root = new Group(); //had to make instance in order to add new items (e.g. multiball, update ToolBar)
 
         balls = new ArrayList<Ball>();
         balls.add(new Ball());
 
-        balls.get(0).setxVelocity(0);
-        balls.get(0).setyVelocity(0);
+        balls.get(0).setVelocity(0, 0);
 
         root.getChildren().addAll(getToolBar());
         root.getChildren().addAll(bricks);
@@ -445,7 +417,7 @@ public class GameManager {
             //death condition
             if (balls.isEmpty()) {
                 lives -= 1;
-                populateScene(myLevel);
+                populateScene();
             }
             //next level condition
             if (bricks.isEmpty() && enemies.isEmpty()) {

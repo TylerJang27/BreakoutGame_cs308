@@ -8,6 +8,10 @@ import javafx.scene.shape.Circle;
  * An abstract class to handle all the following in-game entities:
  *          Ball
  *          Power Up
+ * Entity handles circular elements that will need to have a set speed and direction as they spin and animate.
+ * All Entity instances will have a skin image.
+ *
+ * This code is well designed because the methods are short and simple, and the class hierarchy allows for logical implementation and extension.
  */
 public abstract class Entity extends Circle {
 
@@ -15,11 +19,11 @@ public abstract class Entity extends Circle {
     private double xVelocity;
     private double yVelocity;
     private double speed;
-    private double direction;
 
     /**
      * Constructor for Entity, a parent of Ball and Powerup
-     * @param image     Image to fill the Entity
+     * Uses default location near the Paddle on the screen
+     * @param image     Skin Image to fill the Entity
      */
     public Entity (Image image) {
         this(image, Main.SIZE, Main.SIZE * 3 / 4);
@@ -27,7 +31,7 @@ public abstract class Entity extends Circle {
 
     /**
      * Expanded constructor for Entity, a parent of Ball and Powerup
-     * @param image     Image to fill the Entity
+     * @param image     Skin Image to fill the Entity
      * @param x         Location of centerX
      * @param y         Location of centerY
      */
@@ -63,26 +67,19 @@ public abstract class Entity extends Circle {
     }
 
     /**
-     * Calculates the speed and direction based on X and Y velocity
-     * @return speed    the magnitude of speed
+     * Mutator for xVelocity and yVelocity and sets rotation speed based on magnitude of speed
+     * @param xVel  the velocity in the x direction
+     * @param yVel  the velocity in the y direction
      */
-    public double calcSpeed() {
-        calcRad();
-        return speed;
-    }
-
-    /**
-     * Calculates the speed and direction based on X and Y velocity
-     * @return direction    the direction of travel
-     */
-    public double calcDirection() {
-        calcRad();
-        return direction;
+    public void setVelocity(double xVel, double yVel) {
+        this.setxVelocity(xVel);
+        this.setyVelocity(yVel);
+        this.calcSpeed();
     }
 
     /**
      * Accessor for the y velocity
-     * @return xVelocity    the velocity of travel in the horizontal direction
+     * @return xVelocity    the velocity in the x direction
      */
     public double getxVelocity() {
         return xVelocity;
@@ -90,7 +87,7 @@ public abstract class Entity extends Circle {
 
     /**
      * Accessor for the y velocity
-     * @return yVelocity    the velocity of travel in the vertical direction
+     * @return yVelocity    the velocity in the y direction
      */
     public double getyVelocity() {
         return yVelocity;
@@ -98,15 +95,9 @@ public abstract class Entity extends Circle {
 
     /**
      * Calculates the speed and direction based on X and Y velocity
+     * Uses speed to set rotation speed.
      */
-    public void calcRad() {
+    public void calcSpeed() {
         speed = Math.sqrt(xVelocity * xVelocity + yVelocity * yVelocity);
-        if (xVelocity == 0) {
-            direction = Math.PI / 2 * yVelocity / Math.abs(yVelocity);
-        } else if (xVelocity < 0) {
-            direction = Math.PI + Math.atan(yVelocity / xVelocity);
-        } else {
-            direction = Math.atan(yVelocity / xVelocity);
-        }
     }
 }

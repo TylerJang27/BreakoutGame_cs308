@@ -12,14 +12,15 @@ import java.io.FileNotFoundException;
  */
 public class Brick extends Rectangle {
 
-    private int hp;
-    private int powerup;
     private static final String HP_3 = "Resources/grey_brick.png";
     private static final String HP_2 = "Resources/red_brick.png";
     private static final String HP_1 = "Resources/blue_brick.png";
     private static final double SCENE_HEIGHT = Main.HEIGHT;
     private static final double BRICK_WIDTH = GameManager.BRICK_WIDTH;
     private static final double BRICK_HEIGHT = GameManager.BRICK_HEIGHT;
+
+    private int hp;
+    private int powerup;
 
     /**
      * Constructor for Brick, taking a default size
